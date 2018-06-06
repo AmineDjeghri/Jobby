@@ -17,3 +17,7 @@ Java EE (JSF Framework), Postgresql, Glassfish, Google Maps API , Ajax, Primefac
 - A lot of other features
 
 ## Jobby showcase application
+![Dashbord](https://github.com/AmineDjeghri/Jobby/blob/master/Other/SCREENS/Dashboard.JPG "Dashbord")
+![Active-offers](https://github.com/AmineDjeghri/Jobby/blob/master/Other/SCREENS/offres-actives.JPG "Active Offers")
+![Sorting](https://github.com/AmineDjeghri/Jobby/blob/master/Other/SCREENS/offre%20tri.JPG "Sorting")
+![My-offers](https://github.com/AmineDjeghri/Jobby/blob/master/Other/SCREENS/Mes-offres.JPG "My Offers")
