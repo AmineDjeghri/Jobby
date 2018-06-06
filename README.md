@@ -2,7 +2,7 @@
 ## Description
 Jobby is a web application that aims to rank resumes in relation to a job offer. Jobby uses **Multiple Criteria Decision Aid (MCDA)** to sort the CVs.  
 ## Programming Languages & Tools Development
-This web application is made with: 
+This web application uses and is made with: 
 Java EE (JSF Framework), Postgresql, Glassfish, Google Maps API , Ajax, Primefaces, Maven, Netbeans,javascript
 
 ## Main features: 
