@@ -4,9 +4,6 @@ Jobby is a web application that aims to rank resumes in relation to a job offer.
 ## Programming Languages & Tools Development
 This web application is made with: 
 Java EE (JSF Framework), Postgresql, Glassfish, Google Maps API , Ajax, Primefaces, Maven, Netbeans,javascript
-* Unordered list can use asterisks
-- Or minuses
-+ Or pluses
 
 ## Main features: 
 - rank resumes in relation to a job offer using 4 criterias: Years of experience, degree of study, skills and languages.
@@ -18,6 +15,12 @@ Java EE (JSF Framework), Postgresql, Glassfish, Google Maps API , Ajax, Primefac
 
 ## Jobby showcase application
 ![Dashbord](https://github.com/AmineDjeghri/Jobby/blob/master/Other/SCREENS/Dashboard.JPG "Dashbord")
+
+
 ![Active-offers](https://github.com/AmineDjeghri/Jobby/blob/master/Other/SCREENS/offres-actives.JPG "Active Offers")
+
+
 ![Sorting](https://github.com/AmineDjeghri/Jobby/blob/master/Other/SCREENS/offre%20tri.JPG "Sorting")
+
+
 ![My-offers](https://github.com/AmineDjeghri/Jobby/blob/master/Other/SCREENS/Mes-offres.JPG "My Offers")
