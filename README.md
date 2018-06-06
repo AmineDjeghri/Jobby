@@ -11,7 +11,6 @@ Java EE (JSF Framework), Postgresql, Glassfish, Google Maps API , Ajax, Primefac
 - A Dashbord with a lot of indicators 
 - Possibility for the candidate to apply for an offer.
 - possibility for the recruiter to respond to the candidate (Accepted, Refused, waiting)
-- A lot of other features
 
 ## Jobby showcase application
 ![Dashbord](https://github.com/AmineDjeghri/Jobby/blob/master/Other/SCREENS/Dashboard.JPG "Dashbord")
