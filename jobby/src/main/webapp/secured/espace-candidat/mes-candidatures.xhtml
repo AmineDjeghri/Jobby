@@ -1,0 +1,42 @@
+<ui:composition template="/WEB-INF/template/layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">Mes Cvs</ui:define>
+
+    <ui:define name="content">
+        
+        <div class="mes-candidatures">
+            <!--Forme qui contient la liste des candidatures et leur modifications-->
+            <h:form id="listCandidaturesForm"> 
+                <!--liste des candidaturess-->
+                <p:dataTable id="cvDataList" class="mes-candidatures-DT" value="#{listeCandidatures_CvControleur.listeCandidatures}" var="candidature"  paginator="true" rows="10"  >
+                    <f:facet name="header">
+                        Mes candidatures
+                    </f:facet>
+                        <p:column headerText="Titre de l'offre">
+                            <h:outputText value="#{candidature.offre.titre}"/>
+                        </p:column>
+                        <p:column headerText="Votre Cv">
+                            <h:outputText value="#{candidature.cv.titreCv}"/>
+                        </p:column>
+                        <p:column headerText="Date de candidature">
+                            <h:outputText value="#{candidature.dateCandidature}">
+                                <f:convertDateTime pattern="dd-MM-yyyy HH:mm"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Réponse du recruteur">
+                            <h:outputText value="#{candidature.typeReponse.nomTypeReponse}" />
+                        </p:column>                
+                </p:dataTable>
+
+            </h:form>
+            
+            
+        </div>
+
+    </ui:define>
+</ui:composition>

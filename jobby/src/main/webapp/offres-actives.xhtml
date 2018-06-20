@@ -1,0 +1,225 @@
+<ui:composition template="/WEB-INF/template/layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">Mes Cvs</ui:define>
+
+    <ui:define name="content">
+        
+        <h:form id="gmapForm">
+                            
+            <!--map where we can see active offers-->
+            <p:gmap id="gmap" class="google-map" center="36.7525000, 3.0419700" zoom="9" type="ROADMAP" style="" model="#{listeOffresActivesControleur.offersMakers}" >                             
+                <p:ajax  event="overlaySelect" listener="#{listeOffresActivesControleur.onMarkerSelect}" update=":listCvsForm:offreDetailsDialog"  oncomplete="PF('offreDetailsDialog').show()" />
+            </p:gmap>        
+
+        </h:form>
+        
+        
+         <!--Barre de recherche des Offres d'emploi--> 
+        <h:form>           
+            <p:panel class="barre-recherche-panel">
+                <h2>Recherche d'offres d'emploi</h2>
+                <h:outputText  class="nbre-offres-output" value="#{listeOffresActivesControleur.nbreOffresActives()}"/> <span>Offres d'emploi au total</span>
+                <div class="barre-recherche">
+                    <p:inputText id="rechercheInput" class="recherche-input"  placeholder="mot clé "  value="#{listeOffresActivesControleur.keyWord}" />
+                    <p:commandButton  class="chercher-submit" value="Chercher" actionListener="#{listeOffresActivesControleur.searchByKeyWord()}"  update=":listCvsForm:offresActivesDatalist :gmapForm:gmap "/>
+                </div>
+             </p:panel>
+        </h:form>   
+         
+        <!-- filter + datalist--> 
+        <div class="filter-datalist">  
+            <h:form class="filter-form">
+                <!--filter panel-->    
+                <p:panel class="filer-panel">
+                    <h:panelGrid  columns="2"  cellpadding="8" >   
+                        
+                        <h:outputText value="Secteur d'activité " />
+                        
+                        <h:selectOneMenu  id="secteurActiviteMenu" value="#{listeOffresActivesControleur.filteredSecteurActivite}">
+                            <f:selectItem itemLabel="Selectionner un secteur"/>
+                            <f:selectItems value="#{listeOffresActivesControleur.listeSecteurActivite}" var="secteurActivite" itemValue="#{secteurActivite}" itemLabel="#{secteurActivite.nomSecteurActivite}"/>
+                        </h:selectOneMenu> 
+                        
+                        
+                        <h:outputLabel  value="Niveau du poste " />
+                        <h:selectOneMenu  id="niveauPosteMenu" value="#{listeOffresActivesControleur.filterNiveauPoste}">
+                            <f:selectItem itemLabel="Selectionner un poste"/>
+                            <f:selectItems value="#{listeOffresActivesControleur.niveauPosteEnums}"  var="niveauPoste" itemValue="#{niveauPoste}" itemLabel="#{niveauPoste.nomNiveauPoste}" />
+                        </h:selectOneMenu> 
+
+                        <h:outputText value="Salaire" />
+                        <p:outputPanel>
+                            <p:inputNumber placeholder="Salaire minimum" value="#{listeOffresActivesControleur.filterSalaireMin}"/>
+                            <p:inputNumber placeholder="Salaire maximum" value="#{listeOffresActivesControleur.filterSalaireMax}"/>
+                        </p:outputPanel>
+                        
+                        <h:outputLabel  value="Type de contrat" />
+                        <h:selectOneMenu  id="typeContratMenu" value="#{listeOffresActivesControleur.filterTypeContrat}" style="width: 180px;">
+                            <f:selectItem itemLabel="Selectionner un type"/>
+                            <f:selectItems  var="typeContrat" value="#{listeOffresActivesControleur.typeContratEnums}" itemValue="#{typeContrat}" itemLabel="#{typeContrat.nomTypeContrat}"/>
+                        </h:selectOneMenu>   
+
+                        <h:outputText value="Année d'experience " />
+                         <p:outputPanel>
+                             <p:inputNumber placeholder="Année exp min" value="#{listeOffresActivesControleur.filterAnneeExpMin}"/>
+                             <p:inputNumber placeholder="Année exp max" value="#{listeOffresActivesControleur.filterAnneeExpMax}"/>
+                        </p:outputPanel>
+
+                        <h:outputLabel  value="Niveau d'étude " />
+                        <h:selectOneMenu  id="niveauEtudeMenu" value="#{listeOffresActivesControleur.filtredNiveauEtude}">
+                            <f:selectItem itemLabel="Selectionner un niveau"/>
+                            <f:selectItems value="#{listeOffresActivesControleur.niveauEtudeEnum}"  var="niveauEtude" itemLabel="#{niveauEtude.nomNiveauEtude}" itemValue="#{niveauEtude}"/>
+                        </h:selectOneMenu> 
+                        
+                        <f:facet name = "footer">
+                            <div class="div-submit">
+                                <p:commandButton id="submit" value = "Filtrer" actionListener="#{listeOffresActivesControleur.filtrer()}" action=" " update=":listCvsForm:offresActivesDatalist :gmapForm:gmap"/> 
+                            </div> 
+                        </f:facet>
+
+                    </h:panelGrid>
+                </p:panel> 
+            </h:form>
+                    
+            <!--Forme qui contient la liste des offres actives-->
+            <div class="liste-cvs-div">
+            <h:form id="listCvsForm" class="offres-actives-form">    
+              
+                <!--liste des offres Actives-->   
+                    <p:dataList id="offresActivesDatalist" class="offres-actives" itemType="none"  var="offreActive" value="#{listeOffresActivesControleur.listeOffresActives}" rows="6" paginator="true" paginatorPosition="bottom" rowsPerPageTemplate="6,12,16"
+                        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                        <div class="offre">
+                            <div class="general-details">                           
+                                <div class="general-informations">
+                                    <div class="photo-offre" style=" paddin-bottom: 20px;">
+                                        <img id="imgLogo" src="#{resource['/img/logo-company.png']}" alt="Logo" style="width: 125px;"/>
+                                    </div>
+                                    <div class="general-informations-div">
+                                        <h:outputText  class="gen-output titre-offre" value="#{offreActive.titre}" style="font-weight: bold; font-size: 17px;"/>
+
+                                        <h:outputText class="gen-output secteur-offre" value="Secteur Activité: #{offreActive.secteurActivite.nomSecteurActivite}" />
+                                        <h:outputText class="gen-output nom-entreprise" value="Entreprise: #{offreActive.recruteur.nomEntreprise}" />
+                                    </div>
+                                </div>   
+
+
+                                <p:commandLink update="@form:offreDetailsDialog"  oncomplete="PF('offreDetailsDialog').show()" >
+                                    <f:setPropertyActionListener value="#{offreActive}" target="#{listeOffresActivesControleur.selectedOffre}" />
+                                    <f:actionListener binding="#{listeOffresActivesControleur.checkCandidature()}"/>                                        
+                                    <h:outputText value="Consulter " />
+                                    <h:outputText styleClass="fa fa-search" />
+                                </p:commandLink>
+
+                            </div>            
+                            <div class="more-details">
+                                <h:outputText styleClass="fa fa-map-marker" style=" color:#365899; "/>            
+                                <h:outputText class="gen-output" value="#{offreActive.adresse}" />  
+
+                                <h:outputText styleClass="fa fa-calendar" style=" color:#365899; "/>  
+                                <h:outputText class="gen-output" value="#{offreActive.dateCreation}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy hh:mm"/>
+                                </h:outputText>
+
+                                <h:outputText styleClass="fa fa-graduation-cap" style=" color:#365899; "/>  
+                                <h:outputText class="gen-output" value="Poste: #{offreActive.niveauPosteEnum.nomNiveauPoste}" /> 
+
+                                <h:outputText styleClass="fa fa-money" style=" color:#365899; "/>  
+                                <h:outputText class="gen-output" value="#{offreActive.salaire} Da"/> 
+
+                            </div>    
+                        </div> 
+                    </p:dataList>
+
+                <p:dialog  draggable="true" width="600"  style="margin-bottom: 200px;" id="offreDetailsDialog" widgetVar="offreDetailsDialog" modal="true" header="#{listeOffresActivesControleur.selectedOffre.titre}">
+                    <p:fieldset legend="Informations de l'offre" >
+                        <h:panelGrid columns="2" cellspacing="5">              
+
+                            <h:outputText value="Secteur d'activité:" />
+                            <h:outputText value="#{listeOffresActivesControleur.selectedOffre.secteurActivite.nomSecteurActivite}" style="color: rgba(0, 0, 0, 0.65);"/>
+
+
+                            <h:outputText value="Type de contrat" />
+                            <h:outputText value="#{listeOffresActivesControleur.selectedOffre.typeContratEnum.nomTypeContrat}" style="color: rgba(0, 0, 0, 0.65);"/>
+
+                            <h:outputText value="Niveau d'étude requis" />
+                            <h:outputText value="#{listeOffresActivesControleur.selectedOffre.niveauEtudeEnum.nomNiveauEtude}" style="color: rgba(0, 0, 0, 0.65);"/>
+
+                            <h:outputText value="Années d'experiences requises:" />
+                            <h:outputText value="#{listeOffresActivesControleur.selectedOffre.anneeExperience} ans" style="color: rgba(0, 0, 0, 0.65);"/>
+                            
+                            <h:outputText value="Date création:" />
+                            <h:outputText value="#{listeOffresActivesControleur.selectedOffre.dateCreation} " style="color: rgba(0, 0, 0, 0.65);">
+                                <f:convertDateTime pattern="dd-MM-yyyy"/>
+                            </h:outputText>   
+
+                            <h:outputText value="Poste:" />
+                            <h:outputText value="#{listeOffresActivesControleur.selectedOffre.niveauPosteEnum.nomNiveauPoste}" style="color: rgba(0, 0, 0, 0.65);"/>  
+                                                                                 
+                            <h:outputText value="Description:" />
+                            <h:outputText value="#{listeOffresActivesControleur.selectedOffre.description}" style="color: rgba(0, 0, 0, 0.65);"/>                         
+                                                        
+                            <h:outputText value="Lieu de travail:" />
+                            <h:outputText value="#{listeOffresActivesControleur.selectedOffre.adresse}" style="color: rgba(0, 0, 0, 0.65);"/>
+                            
+                            <h:outputText value="Salaire" />
+                            <h:outputText value="#{listeOffresActivesControleur.selectedOffre.salaire} Da" style="color: rgba(0, 0, 0, 0.65);"/>                                 
+                        </h:panelGrid>  
+                    </p:fieldset>
+                    <p:fieldset legend="informations du recruteur">
+                        <h:panelGrid columns="2" cellspacing="5">
+                            <h:outputText value="Nom" />
+                            <h:outputText value="#{listeOffresActivesControleur.selectedOffre.recruteur.nomEntreprise}" style="color: rgba(0, 0, 0, 0.65);"/>   
+                            
+                            <h:outputText value="Email" />
+                            <h:outputText value="#{listeOffresActivesControleur.selectedOffre.recruteur.email}" style="color: rgba(0, 0, 0, 0.65);"/>   
+                            
+                            <h:outputText value="Telephone " />
+                            <h:outputText value="#{listeOffresActivesControleur.selectedOffre.recruteur.telEntreprise}" style="color: rgba(0, 0, 0, 0.65);"/>
+                            
+                            <h:outputText value="Adresse " />
+                            <h:outputText value="#{listeOffresActivesControleur.selectedOffre.recruteur.adresseEntreprise}" style="color: rgba(0, 0, 0, 0.65);"/>
+                            
+                            <h:outputText value="Compte vérifié " />
+                            <h:outputText value="#{listeOffresActivesControleur.selectedOffre.recruteur.compteVerification eq true ? 'Oui' : 'Non'}" style="color: rgba(0, 0, 0, 0.65);"/>
+                            
+                            
+                            
+                        </h:panelGrid>
+                    </p:fieldset>
+                    
+                    <h:panelGrid columns="1">
+                        <p:dataTable id="languesTable" value="#{listeOffresActivesControleur.selectedOffre.listeLangues_offre}" var="langue" >                    
+                           <p:column headerText="langues demandées">
+                               <h:outputText value="#{langue.langueEnum}" />
+                           </p:column>    
+                            <p:column headerText="niveau demandé">
+                                <p:rating value="#{langue.niveauLangue}" />
+                            </p:column>  
+                        </p:dataTable>
+
+                        <p:dataTable id="competencesTable"  value="#{listeOffresActivesControleur.selectedOffre.listeCompetences_offre}" var="competence" >                    
+                            <p:column headerText="competences demandés">
+                                <h:outputText value="#{competence.competence.nomCompetence}" />
+                            </p:column> 
+
+                            <p:column headerText="niveau demandé">
+                                <p:rating value="#{competence.niveauCompetence}" />
+                            </p:column>                              
+                        </p:dataTable>  
+                    </h:panelGrid>
+
+                    <p:commandButton update="offreDetailsDialog growl"  value="Postuler" actionListener="#{listeOffresActivesControleur.postuler()}" rendered="#{not listeOffresActivesControleur.dejaCandidat and membre.hasType('Candidat')}"/>
+                    <p:commandButton update="offreDetailsDialog "  value="enlever" actionListener="#{listeOffresActivesControleur.enlever()}" rendered="#{listeOffresActivesControleur.dejaCandidat and membre.hasType('Candidat')}"/>              
+            </p:dialog>  
+            </h:form>
+            </div>
+            </div>
+       
+                <script src="http://maps.google.com/maps/api/js?key=AIzaSyDyAYIzXtDhupssobB4r6ZkGMkF2SXs2r0" type="text/javascript"></script>
+    </ui:define>
+</ui:composition>

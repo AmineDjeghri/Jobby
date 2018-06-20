@@ -1,0 +1,105 @@
+<ui:composition template="/WEB-INF/template/admin-layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">Tableau de bord</ui:define>
+
+    <ui:define name="admin-content">
+        
+        <div class="panels-stats">
+            <p:panel class="panel-stat">
+                <div>
+                    <h:outputText  styleClass="fa fa-users panel-icon" style="color:#ea2c6d; "/>
+                    <div>
+                        <p>Inscrits</p>
+                        <h4>#{dashboardControleur.nbreMembres()}</h4>
+                        
+                    </div>    
+                </div>    
+                <hr/>  
+                <div>  
+                    <h:outputText  styleClass="fa fa-clock-o" />  
+                    <h:outputText value=" Aujourd'hui: " class="small-title" /> 
+                    <h:outputText value=" #{dashboardControleur.nbreMembresInscrisAujourdhui()} " class="small-title" /> 
+                </div>
+            </p:panel>
+            
+            <p:panel class="panel-stat">
+                <div>
+                    <h:outputText  styleClass="fa fa-newspaper-o panel-icon" style="color:#3F51B5; "/>
+                    <div>
+                        <p>Offres d'emploi</p>
+                        <h4>#{dashboardControleur.nbreOffres()}</h4>                     
+                    </div>      
+                </div>    
+                <hr/>  
+                <div>  
+                    <h:outputText  styleClass="fa fa-calendar" />  
+                    <h:outputText value=" Aujourd'hui: " class="small-title" /> 
+                    <h:outputText value=" #{dashboardControleur.nbreOffresAujourdhui()} " class="small-title" /> 
+                </div>
+            </p:panel>
+            
+            <p:panel class="panel-stat">
+                <div>
+                    <h:outputText  styleClass="fa fa-file-text-o panel-icon" style="color:#F9B84A; "/>
+                    <div>
+                        <p>Cvs</p>
+                        <h4>#{dashboardControleur.nbreCvs()}</h4>
+                        
+                    </div>    
+                </div>    
+                <hr/>  
+                <div>  
+                    <h:outputText  styleClass="fa fa-check" />  
+                    <h:outputText value=" Actifs: " class="small-title" /> 
+                    <h:outputText value=" #{dashboardControleur.nbreCvsActifs()} " class="small-title" /> 
+                </div>
+            </p:panel>
+            
+            <p:panel class="panel-stat">
+                <div>
+                    <h:outputText  styleClass="fa fa-users panel-icon" style="color:#58BA27; "/>
+                    <div>
+                        <p>Connectés en ce moment</p>
+                        <h4>#{loginControleur.numberConnectedUser}</h4>
+                        
+                    </div>    
+                </div>    
+                <hr/>  
+                <div>  
+                    <h:outputText  styleClass="fa fa-clock-o" />  
+                    <h:outputText value=" Connectés aujourd'hui: " class="small-title" /> 
+                    <h:outputText value=" #{dashboardControleur.nbreMembresConnectesAujourdhui()} " class="small-title" /> 
+                </div>
+            </p:panel>       
+        </div>  
+        <div class="graph-stats">
+            <div>   
+                <p:chart responsive="true" type="line" model="#{dashboardControleur.lineNbrAnnonces}" class="lineChart"/>
+                <p:chart responsive="true"  type="line" model="#{dashboardControleur.lineInscriptions}" class="lineChart" />
+            </div> 
+            <br/>
+            <div>
+               <p:chart responsive="true"  type="bar" model="#{dashboardControleur.barSecteurActiviteOffre}" class="barChart"/>
+                <p:chart responsive="true"  type="bar" model="#{dashboardControleur.barSecteurActiviteRecherche}" class="barChart"/> 
+            </div>
+            <br/>
+            
+        </div> 
+        
+    <script>
+        function customExtender () {
+            this.cfg.grid = {
+            background: '#FFF' //Set background to white
+             
+            };
+        }
+    </script>    
+
+    </ui:define>
+</ui:composition>
+

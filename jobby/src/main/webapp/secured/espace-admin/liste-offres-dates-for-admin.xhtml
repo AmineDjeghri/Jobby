@@ -1,0 +1,116 @@
+<ui:composition template="/WEB-INF/template/admin-layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">Gestion des Offres</ui:define>
+
+    <ui:define name="admin-content">
+    <h:form> 
+        
+        
+    
+        
+        <p:dataTable id="offresDataTable" widgetVar="offresDataTable" sortBy="#{offre.id}"   value="#{listeOffresForAdminControleur.listeOffres}" var="offre" editable="true" >
+            
+            
+            <f:facet name="header" class="column-header">
+               Toutes les offres
+            </f:facet>
+            <f:facet name="header">
+                <p:outputPanel>
+                    <h:outputText value="Search all fields:" />
+                    <p:inputText id="globalFilter" onkeyup="PF('offresDataTable').filter()"  style="width:150px" placeholder="Entrer un mot clé"/>
+                </p:outputPanel>
+            </f:facet>    
+
+            <p:ajax event="rowEdit" listener="#{listeOffresForAdminControleur.onRowEdit}" update="growl" />
+            <p:ajax event="rowEditCancel" listener="#{listeOffresForAdminControleur.onRowCancel}" update="growl" />
+
+            <p:column headerText="Id de l'offre" filterBy="#{offre.id}" filterMatchMode="contains" sortBy="#{offre.id}">
+                <h:outputText value="#{offre.id}" />
+            </p:column>
+            
+            <p:column headerText="Id du recruteur" filterBy="#{offre.recruteur.id}" filterMatchMode="contains" sortBy="#{offre.recruteur.id}">
+                <h:outputText value="#{offre.recruteur.id}" />         
+            </p:column>
+
+            <p:column headerText="Titre de l'offre" filterBy="#{offre.titre}" filterMatchMode="contains" sortBy="#{offre.titre}"> 
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{offre.titre}" /></f:facet>
+                    <f:facet name="input"><h:inputText value="#{offre.titre}"  /></f:facet>
+                </p:cellEditor>
+            </p:column>
+            
+            <p:column headerText="Date de création" filterBy="#{offre.dateCreation}" filterMatchMode="contains" sortBy="#{offre.dateCreation}"> 
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{offre.dateCreation}" >
+                            <f:convertDateTime type="date" pattern="dd-MM-yyyy HH:mm"/>
+                        </h:outputText>  
+                    </f:facet>
+                    <f:facet name="input"><p:calendar value="#{offre.dateCreation}"  /></f:facet>
+                </p:cellEditor>
+            </p:column>  
+            
+            <p:column headerText="Date de Modification" filterBy="#{offre.dateModification}" filterMatchMode="contains" sortBy="#{offre.dateModification}"> 
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{offre.dateModification}" >
+                            <f:convertDateTime type="date" pattern="dd-MM-yyyy HH:mm"/>
+                        </h:outputText>
+                    </f:facet>
+                    <f:facet name="input"><p:calendar value="#{offre.dateModification}"  /></f:facet>
+                </p:cellEditor>
+            </p:column>  
+            
+            <p:column headerText="Date d'activation" filterBy="#{offre.dateActivation}" filterMatchMode="contains" sortBy="#{offre.dateActivation}"> 
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{offre.dateActivation}" >
+                            <f:convertDateTime type="date" pattern="dd-MM-yyyy HH:mm"/>
+                        </h:outputText>
+                    </f:facet>
+                    <f:facet name="input"><p:calendar value="#{offre.dateActivation}"  /></f:facet>
+                </p:cellEditor>
+            </p:column>  
+            
+            <p:column headerText="Date de Desactivation" filterBy="#{offre.dateDesactivation}" filterMatchMode="contains" sortBy="#{offre.dateDesactivation}"> 
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{offre.dateDesactivation}" >
+                            <f:convertDateTime type="date" pattern="dd-MM-yyyy HH:mm"/>
+                        </h:outputText>
+                    </f:facet>
+                    <f:facet name="input"><p:calendar value="#{offre.dateDesactivation}"  /></f:facet>
+                </p:cellEditor>
+            </p:column> 
+                       
+            
+<!--            <p:column headerText="Date de Supression" filterBy="#{offre.dateSupression}" filterMatchMode="contains" sortBy="#{offre.dateSupression}"> 
+                <p:cellEditor>
+                    <f:facet name="output">
+                    <h:outputText value="#{offre.dateSupression}" >
+                        <f:convertDateTime type="date" pattern="dd-MM-yyyy HH:mm"/>
+                    </h:outputText>    
+                    </f:facet>
+                    <f:facet name="input"><p:calendar value="#{offre.dateSupression}"  /></f:facet>
+                </p:cellEditor>
+            </p:column>                      -->
+            
+            <p:column  headerText="Modif">
+                <p:rowEditor />
+            </p:column>
+            
+
+          
+        </p:dataTable>
+
+    
+    </h:form>
+        
+
+    </ui:define>
+</ui:composition>

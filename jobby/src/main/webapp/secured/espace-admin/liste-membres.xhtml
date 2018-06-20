@@ -1,0 +1,108 @@
+<ui:composition template="/WEB-INF/template/admin-layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">Gestion des comptes</ui:define>
+
+    <ui:define name="admin-content">
+    <h:form> 
+        
+        
+    
+        
+        <p:dataTable id="membresDataTable" widgetVar="membresDataTable" sortBy="#{membre.id}"  class="membres-dataTable"  value="#{listeMembreControleur.listeMembre}" var="membre" editable="true" style="margin-bottom:20px">
+            
+            
+            <f:facet name="header" class="column-header">
+               Tous les comptes
+            </f:facet>
+            <f:facet name="header">
+                <p:outputPanel>
+                    <h:outputText value="Search all fields:" />
+                    <p:inputText id="globalFilter" onkeyup="PF('membresDataTable').filter()"  style="width:150px" placeholder="Enter keyword"/>
+                </p:outputPanel>
+            </f:facet>    
+
+            <p:ajax event="rowEdit" listener="#{listeMembreControleur.onRowEdit}" update="growl" />
+            <p:ajax event="rowEditCancel" listener="#{listeMembreControleur.onRowCancel}" update="growl" />
+
+            <p:column headerText="Id" filterBy="#{membre.id}" filterMatchMode="contains" sortBy="#{membre.id}">
+                <h:outputText value="#{membre.id}" />
+            </p:column>
+            <p:column headerText="Type de compte" filterBy="#{membre.dtype}" filterMatchMode="contains" sortBy="#{membre.dtype}">
+
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{membre.dtype}" /></f:facet>
+                    <f:facet name="input"><h:inputText value="#{membre.dtype}" style="width:100%" /></f:facet>
+                </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="Nom" filterBy="#{membre.nom}" filterMatchMode="contains" sortBy="#{membre.nom}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{membre.nom}" /></f:facet>
+                    <f:facet name="input"><h:inputText value="#{membre.nom}" style="width:100%" /></f:facet>
+                </p:cellEditor>
+            </p:column>
+            
+            <p:column headerText="Prénom" filterBy="#{membre.prenom}" filterMatchMode="contains" sortBy="#{membre.prenom}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{membre.prenom}" /></f:facet>
+                    <f:facet name="input"><h:inputText value="#{membre.prenom}" style="width:100%" /></f:facet>
+                </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="Date de Naissance"  sortBy="#{membre.dateNaissance}" filterBy="#{membre.dateNaissance}" filterMatchMode="contains">
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{membre.dateNaissance}" >
+                            <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+                        </h:outputText>
+                    </f:facet>
+                    <f:facet name="input"><p:calendar value="#{membre.dateNaissance}" navigator="true" yearRange="c-100:c+0" style="width:100%" /></f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column headerText="Email" filterBy="#{membre.email}" filterMatchMode="contains" sortBy="#{membre.email}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{membre.email}" /></f:facet>
+                    <f:facet name="input"><h:inputText value="#{membre.email}" style="width:100%" /></f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column headerText="Compte Activé" sortBy="#{membre.compteActivation}">      
+                <p:cellEditor>
+                    <f:facet name="output"><h:selectBooleanCheckbox disabled="true" value="#{membre.compteActivation}" /></f:facet>
+                    <f:facet name="input"><h:selectBooleanCheckbox value="#{membre.compteActivation}" style="width:100%" /></f:facet>
+                </p:cellEditor>
+            </p:column>   
+            <p:column headerText="Date création" sortBy="#{membre.dateCreation}" filterBy="#{membre.dateCreation}" filterMatchMode="contains">                
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{membre.dateCreation}" >
+                            <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+                        </h:outputText>
+                    </f:facet>
+                    <f:facet name="input"><p:calendar disabled="true" value="#{membre.dateCreation}" navigator="true" yearRange="c-100:c+0"  /></f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column headerText="Date dernière Conx" sortBy="#{membre.dateDerniereConx}" filterBy="#{membre.dateDerniereConx}" filterMatchMode="contains">
+                    <f:facet name="output"><h:outputText value="#{membre.dateDerniereConx}" /></f:facet>
+
+            </p:column>
+            
+            
+            <p:column  headerText="Modif">
+                <p:rowEditor />
+            </p:column>
+            
+
+          
+        </p:dataTable>
+
+    
+    </h:form>
+        
+
+    </ui:define>
+</ui:composition>

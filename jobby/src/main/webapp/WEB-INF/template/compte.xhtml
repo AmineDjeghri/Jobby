@@ -1,0 +1,20 @@
+<ui:composition template="/WEB-INF/template/layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:outputStylesheet library="css" name="style.css"/>
+    <ui:define name="title">Compte</ui:define>
+
+    <ui:define name="content">
+        <div style="display: flex;  width: 100%;">
+            <nav style="margin-top: 10px;"><ui:include src="/WEB-INF/template/compte-nav.xhtml"/></nav>
+            <section style="width: 100%;">
+                <div style="width: 60%; margin: auto auto auto 30px;">      
+                    <ui:insert name="compte-content">bienvenue à votre compte</ui:insert>
+                </div>
+            </section>
+        </div>
+
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,90 @@
+<ui:composition template="/WEB-INF/template/admin-layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">Gestion des recruteurs</ui:define>
+
+    <ui:define name="admin-content">
+    <h:form> 
+        
+        
+    
+        
+        <p:dataTable id="recruteursDataTable" widgetVar="recruteursDataTable" sortBy="#{recruteur.id}"   value="#{listeRecruteursControleur.listeRecruteurs}" var="recruteur" editable="true" >
+            
+            
+            <f:facet name="header" class="column-header">
+               Tous les recruteurs
+            </f:facet>
+            <f:facet name="header">
+                <p:outputPanel>
+                    <h:outputText value="Search all fields:" />
+                    <p:inputText id="globalFilter" onkeyup="PF('recruteursDataTable').filter()"  style="width:150px" placeholder="Entrer un mot clé"/>
+                </p:outputPanel>
+            </f:facet>    
+
+            <p:ajax event="rowEdit" listener="#{listeRecruteursControleur.onRowEdit}" update="growl" />
+            <p:ajax event="rowEditCancel" listener="#{listeRecruteursControleur.onRowCancel}" update="growl" />
+
+            <p:column headerText="Id" filterBy="#{recruteur.id}" filterMatchMode="contains" sortBy="#{recruteur.id}">
+                <h:outputText value="#{recruteur.id}" />
+            </p:column>
+
+            <p:column headerText="Nom" filterBy="#{recruteur.nom}" filterMatchMode="contains" sortBy="#{recruteur.nom}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{recruteur.nom}" /></f:facet>
+                    <f:facet name="input"><h:inputText value="#{recruteur.nom}" style="width:100%" /></f:facet>
+                </p:cellEditor>
+            </p:column>
+            
+            <p:column headerText="Prénom" filterBy="#{recruteur.prenom}" filterMatchMode="contains" sortBy="#{recruteur.prenom}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{recruteur.prenom}" /></f:facet>
+                    <f:facet name="input"><h:inputText value="#{recruteur.prenom}" style="width:100%" /></f:facet>
+                </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="Nom Entreprise" filterBy="#{recruteur.nomEntreprise}" filterMatchMode="contains" sortBy="#{recruteur.nomEntreprise}"> 
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{recruteur.nomEntreprise}" /></f:facet>
+                    <f:facet name="input"><h:inputText value="#{recruteur.nomEntreprise}" style="width:100%" /></f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column headerText="Enreprise Vérifiée" sortBy="#{recruteur.compteVerification}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:selectBooleanCheckbox disabled="true" value="#{recruteur.compteVerification}" /></f:facet>
+                    <f:facet name="input"><h:selectBooleanCheckbox value="#{recruteur.compteVerification}"  /></f:facet>
+                </p:cellEditor>
+            </p:column>   
+            <p:column headerText="Adresse" filterBy="#{recruteur.adresseEntreprise}" filterMatchMode="contains" sortBy="#{recruteur.adresseEntreprise}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{recruteur.adresseEntreprise}" /></f:facet>
+                    <f:facet name="input"><h:inputText value="#{recruteur.adresseEntreprise}" /></f:facet>
+                </p:cellEditor>
+            </p:column>
+            
+            <p:column headerText="Téléphone" filterBy="#{recruteur.telEntreprise}" filterMatchMode="contains" sortBy="#{recruteur.telEntreprise}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{recruteur.telEntreprise}" /></f:facet>
+                    <f:facet name="input"><p:inputMask mask="9999 99 99 99" value="#{recruteur.telEntreprise}"/></f:facet>
+                </p:cellEditor>
+            </p:column>
+            
+            
+            <p:column  headerText="Modif">
+                <p:rowEditor />
+            </p:column>
+            
+
+          
+        </p:dataTable>
+
+    
+    </h:form>
+        
+
+    </ui:define>
+</ui:composition>

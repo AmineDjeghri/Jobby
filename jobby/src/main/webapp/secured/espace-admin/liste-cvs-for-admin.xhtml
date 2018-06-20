@@ -1,0 +1,121 @@
+<ui:composition template="/WEB-INF/template/admin-layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">Gestion des Offres</ui:define>
+
+    <ui:define name="admin-content">
+    <h:form> 
+        
+        
+    
+        
+        <p:dataTable id="cvsDataTable" widgetVar="cvsDataTable" sortBy="#{cv.id}"   value="#{listeCvsForAdminControleur.listeCvs}" var="cv" editable="true" >
+            
+            
+            <f:facet name="header" class="column-header">
+               Tous les CVs
+            </f:facet>
+            <f:facet name="header">
+                <p:outputPanel>
+                    <h:outputText value="Search all fields:" />
+                    <p:inputText id="globalFilter" onkeyup="PF('cvsDataTable').filter()"  style="width:150px" placeholder="Entrer un mot clé"/>
+                </p:outputPanel>
+            </f:facet>    
+
+            <p:ajax event="rowEdit" listener="#{listeCvsForAdminControleur.onRowEdit}" update="growl"/>
+            <p:ajax event="rowEditCancel" listener="#{listeCvsForAdminControleur.onRowCancel}" update="growl" />
+
+            <p:column headerText="Id du CV" filterBy="#{cv.id}" filterMatchMode="contains" sortBy="#{cv.id}">
+                <h:outputText value="#{cv.id}" />
+            </p:column>
+            
+            <p:column headerText="Id du candidat" filterBy="#{cv.candidat.id}" filterMatchMode="contains" sortBy="#{cv.candidat.id}">
+                <h:outputText value="#{cv.candidat.id}" />         
+            </p:column>
+
+            <p:column headerText="Titre du Cv" filterBy="#{cv.titreCv}" filterMatchMode="contains" sortBy="#{cv.titreCv}"> 
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{cv.titreCv}" /></f:facet>
+                    <f:facet name="input"><h:inputText value="#{cv.titreCv}"  /></f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column headerText="Secteur d'activité souhaité" filterBy="#{cv.secteurActivite.nomSecteurActivite}" filterMatchMode="contains" sortBy="#{cv.secteurActivite.nomSecteurActivite}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{cv.secteurActivite.nomSecteurActivite}" /></f:facet>
+                    <f:facet name="input">
+                        <h:selectOneMenu value="#{cv.secteurActivite}" style="width:100%">
+                            <f:selectItems value="#{listeCvsForAdminControleur.listeSecteurs}" var="secteur" itemLabel="#{secteur.nomSecteurActivite}" itemValue="#{secteur}" />
+                        </h:selectOneMenu>                        
+                    </f:facet>
+                </p:cellEditor>   
+            </p:column>   
+            <p:column headerText="Année Experience"  sortBy="#{cv.anneeExperience}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText  value="#{cv.anneeExperience}" /></f:facet>
+                    <f:facet name="input"><p:inputNumber  value="#{cv.anneeExperience}"  /></f:facet>
+                </p:cellEditor>
+            </p:column>
+            
+            <p:column headerText="Niveau d'étude" filterBy="#{cv.niveauEtudeEnum.nomNiveauEtude}" filterMatchMode="contains" sortBy="#{cv.niveauEtudeEnum.nomNiveauEtude}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{cv.niveauEtudeEnum.nomNiveauEtude}" /></f:facet>
+                    <f:facet name="input">                       
+                        <h:selectOneMenu value="#{cv.niveauEtudeEnum}" style="width:100%">
+                            <f:selectItems value="#{listeCvsForAdminControleur.listeNiveauEtude}" var="niveauEtude" itemLabel="#{niveauEtude.nomNiveauEtude}" itemValue="#{niveauEtude}" />
+                        </h:selectOneMenu>
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column headerText="Poste souhaité" filterBy="#{cv.niveauPosteEnum.nomNiveauPoste}" filterMatchMode="contains" sortBy="#{cv.niveauPosteEnum.nomNiveauPoste}"> 
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{cv.niveauPosteEnum.nomNiveauPoste}"/></f:facet>
+                    <f:facet name="input">
+                        <h:selectOneMenu value="#{cv.niveauPosteEnum}" style="width:100%">
+                            <f:selectItems value="#{listeCvsForAdminControleur.listeNiveauPoste}" var="niveauPoste" itemLabel="#{niveauPoste.nomNiveauPoste}" itemValue="#{niveauPoste}" />
+                        </h:selectOneMenu>
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column headerText="Situation Actuelle" filterBy="#{cv.situationActuelle.nomSituation}" filterMatchMode="contains" sortBy="#{cv.situationActuelle.nomSituation}"> 
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{cv.situationActuelle.nomSituation}" /></f:facet>
+                    <f:facet name="input">
+                        <h:selectOneMenu value="#{cv.situationActuelle}" style="width:100%">
+                            <f:selectItems value="#{listeCvsForAdminControleur.listeSituationActuelle}" var="situationActuelle" itemLabel="#{situationActuelle.nomSituation}" itemValue="#{situationActuelle}" />
+                        </h:selectOneMenu>
+                        
+                    </f:facet>
+                </p:cellEditor>
+            </p:column> 
+            <p:column headerText="Qualités humaines" filterBy="#{cv.qualitesHumaines}" filterMatchMode="contains" sortBy="#{cv.qualitesHumaines}"> 
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{cv.qualitesHumaines}" /></f:facet>
+                    <f:facet name="input"><h:inputText value="#{cv.qualitesHumaines}"/></f:facet>
+                </p:cellEditor>
+            </p:column> 
+            <p:column headerText="Service Militaire" > 
+                <h:outputText value="#{cv.candidat.serviceMilitaire}"/>
+            </p:column>   
+            <p:column headerText="Situation familiale" >       
+                <h:outputText value="#{cv.candidat.situationFamilialeEnum}"/>
+            </p:column>   
+            
+            
+            <p:column  headerText="Modif">
+                <p:rowEditor />
+            </p:column>
+            
+
+          
+        </p:dataTable>
+
+    
+    </h:form>
+        
+
+    </ui:define>
+</ui:composition>

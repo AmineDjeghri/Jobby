@@ -1,0 +1,86 @@
+<ui:composition template="/WEB-INF/template/layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+    <h:outputStylesheet library="css" name="style.css"/>
+    
+    <ui:define name="title">Inscription candidat </ui:define>
+
+    <ui:define name="content">    
+        
+        <h:form rendered="#{not loginControleur.loggedIn}">
+          <p:fieldset  legend="inscription recruteur" toggleable="true">
+              <p:messages globalOnly="true"/>
+            <h:panelGrid columns="3" styleClass="inscriptionPanelGrid" >
+                
+                <p:outputLabel value="email" for="email"/>
+                <p:inputText value="#{recruteurInscriptionControleur.recruteur.email}" id="email" validatorMessage="format du mail invalide" 
+                             required="true" requiredMessage="email obligatoire">
+                <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                <f:ajax event="blur" render="emailMessage" />
+                </p:inputText>
+                <p:message for="email" id="emailMessage"/> 
+                
+                <p:outputLabel value="mdp" for="mdp"/>
+                <p:password value="#{recruteurInscriptionControleur.recruteur.mdp}" id="mdp" required="true" requiredMessage="mot de passe obligatoire"
+                            binding="#{composantMotDePasse}">    
+                <f:ajax event="blur" render="mdpMessage" />
+                </p:password>
+                <p:message for="mdp" id="mdpMessage"/>     
+                
+                
+                <p:outputLabel value="confirmer mdp" for="mdpConfirmation"/>
+                <p:password value="#{recruteurInscriptionControleur.recruteur.mdp}" id="mdpConfirmation" required="true" requiredMessage="confirmation du mot de passe obligatoire">  
+                <f:validator validatorId="confirmationMotDePasseValidator" />
+                <f:attribute name="composantMotDePasse" value="#{composantMotDePasse}" />
+                <f:ajax event="blur" render="mdpMessage mdpConfirmMessage"  execute="mdp mdpConfirmation" />
+                </p:password>
+                <p:message for="mdpConfirmation" id="mdpConfirmMessage"/>
+                
+                <p:outputLabel value="nom" for="nom"/>
+                <p:inputText value="#{recruteurInscriptionControleur.recruteur.nom}" id="nom" required="true" requiredMessage="nom obligatoire">    
+                <f:ajax event="blur" render="nomMessage" />
+                </p:inputText>
+                <p:message for="nom" id="nomMessage"/>     
+                
+                <p:outputLabel value="prenom" for="prenom" />
+                <p:inputText value="#{recruteurInscriptionControleur.recruteur.prenom}" id="prenom" required="true" requiredMessage="prénom obligatoire">    
+                <f:ajax event="blur" render="prenomMessage" />
+                </p:inputText>
+                <p:message for="prenom" id="prenomMessage"/>    
+                
+                <p:outputLabel value="nomEntreprise" for="nomEntreprise" />
+                <p:inputText value="#{recruteurInscriptionControleur.recruteur.nomEntreprise}" id="nomEntreprise" required="true" requiredMessage="nom entreprise obligatoire">    
+                <f:ajax event="blur" render="nomEntrepriseMessage" />
+                </p:inputText>
+                <p:message for="nomEntreprise" id="nomEntrepriseMessage"/>   
+
+                <p:outputLabel value="adresse Entreprise" for="adresseEntreprise" />
+                <p:inputText value="#{recruteurInscriptionControleur.recruteur.adresseEntreprise}" id="adresseEntreprise" required="true" requiredMessage="adresse entreprise obligatoire">    
+                <f:ajax event="blur" render="adresseEntrepriseMessage" />
+                </p:inputText>
+                <p:message for="adresseEntreprise" id="adresseEntrepriseMessage"/>   
+
+                <p:outputLabel value="telephone entrepise" for="telEntreprise" />
+                <p:inputMask value="#{recruteurInscriptionControleur.recruteur.telEntreprise}" id="telEntreprise" required="true" mask="9999 99 99 99" requiredMessage="tel Entreprise obligatoire">    
+                    
+                </p:inputMask>
+                <p:message for="telEntreprise" id="telEntrepriseMessage"/> 
+                
+                <p:outputLabel value="Date de naissance" for="dateNaissance" />             
+                <p:calendar id="dateNaissance" navigator="true" yearRange="c-100:c+0" value="#{recruteurInscriptionControleur.recruteur.dateNaissance}" required="true" requiredMessage="Date de naissance obligatoire">
+                <f:ajax event="blur" render="dateNaissanceMessage" />
+                </p:calendar>
+                <p:message for="dateNaissance" id="dateNaissanceMessage" />                 
+                
+            </h:panelGrid>
+              <p:commandButton value="Creer votre compte" actionListener="#{recruteurInscriptionControleur.creerRecruteur()}" update="@form"  /> 
+          </p:fieldset>
+            
+        </h:form>
+        
+        <h:outputText rendered="#{loginControleur.loggedIn}" value="veuillez vous deconnecter pour vous inscrire"/>        
+      </ui:define>  
+</ui:composition>

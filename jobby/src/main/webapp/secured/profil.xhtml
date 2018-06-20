@@ -1,0 +1,85 @@
+<ui:composition template="/WEB-INF/template/compte.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+    <h:outputStylesheet library="css" name="style.css"/>
+    <ui:define name="title">Compte</ui:define>
+
+    <ui:define name="compte-content">
+    
+        <div style="background: white; border-radius: 5px; margin-top: 10px;">
+        <h:form>
+            <p:fieldset  legend="Infos générals" toggleable="true" >
+                <h:panelGrid  columns="3" cellspacing="5" >               
+                
+                    <p:outputLabel value="Nom" for="nom" class="design-output"/>
+                    <p:inputText value="#{modifierProfilControleur.membre.nom}" id="nom" required="true" requiredMessage="nom obligatoire">    
+                    <f:ajax event="blur" render="nomMessage" />
+                    </p:inputText>
+                    <p:message for="nom" id="nomMessage"/>     
+
+                    <p:outputLabel value="Prénom" for="prenom" class="design-output"/>
+                    <p:inputText value="#{modifierProfilControleur.membre.prenom}" id="prenom" required="true" requiredMessage="prénom obligatoire">    
+                    <f:ajax event="blur" render="prenomMessage" />
+                    </p:inputText>
+                    <p:message for="prenom" id="prenomMessage" />               
+                    
+                    <p:outputLabel value="Date de naissance" for="dateNaissance" class="design-output"/>
+                    <p:calendar id="dateNaissance" value="#{modifierProfilControleur.membre.dateNaissance}" navigator="true" yearRange="c-100:c+0"  required="true" requiredMessage="date de naissance obligatoire">    
+                    <f:ajax event="blur" render="dateNaissanceMessage" />
+                    </p:calendar>
+                    <p:message for="dateNaissance" id="dateNaissanceMessage"/> 
+                </h:panelGrid>
+                
+                <h:panelGrid  columns="2" cellspacing="5">
+                    <p:outputLabel value="Type de compte:" for="dtype" class="design-output"/>
+                    <h:outputText value="#{modifierProfilControleur.membre.dtype}" id="dtype" style=" color:#365899; margin-left: 25px; font-family: Roboto, Helvetica, Arial, sans-serif; font-weight:bold;"/>
+
+                    <p:outputLabel value="Date de creation:" for="dateCreation" class="design-output"/>
+                    <h:outputText value="#{modifierProfilControleur.membre.dateCreation}" id="dateCreation" style=" color:#365899;margin-left: 25px; font-family: Roboto, Helvetica, Arial, sans-serif; font-weight:bold;">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm" />
+                    </h:outputText>
+                                  
+                </h:panelGrid> 
+                <p:commandButton value="Enregistrer" actionListener="#{modifierProfilControleur.modifierMembre()}" update="@form growl :header-login-infos"   /> 
+            </p:fieldset>
+        </h:form> 
+        <h:form>
+            <p:fieldset  legend="Infos du candidat" toggleable="true" rendered="#{loginControleur.membre.hasType('Candidat')}">
+                <h:panelGrid  columns="2" cellspacing="5">                 
+                    <p:outputLabel value="Adresse" for="adresseCandidat" class="design-output"/>
+                    <p:inputText value="#{modifierProfilControleur.candidat.adresseCandidat}" id="adresseCandidat" />    
+                 
+
+                    <p:outputLabel value="Teléphone" for="telCandidat" class="design-output" />
+                    <p:inputMask mask="9999 99 99 99" value="#{modifierProfilControleur.candidat.telCondidat}" id="telCandidat"  />    
+  
+                    
+                    <p:outputLabel value="Service Militaire" for="serviceMilitaire" class="design-output"/>
+                    <h:selectBooleanCheckbox value="#{modifierProfilControleur.candidat.serviceMilitaire}" id="serviceMilitaire" />    
+
+                    <p:outputLabel value="Situation Familiale" for="situationFamiliale" class="design-output"/>
+                    <h:selectOneMenu value="#{modifierProfilControleur.candidat.situationFamilialeEnum}" id="situationFamiliale" >
+                        <f:selectItem itemLabel="Selectionner une situation"/>
+                        <f:selectItems  var="situationFamiliale" value="#{modifierProfilControleur.situationFamilialeEnums}" itemValue="#{situationFamiliale}" itemLabel="#{situationFamiliale}"/>
+                    </h:selectOneMenu>  
+                    
+                </h:panelGrid>       
+                <p:commandButton value="Enregistrer" actionListener="#{modifierProfilControleur.modifierCandidat()}" update="@form growl"   /> 
+            </p:fieldset>            
+        </h:form>    
+
+            <h:form style="margin-top: 20px;" enctype="multipart/form-data">
+                <span style="margin-left: 10px;" class="design-output">Modifier votre photo de profil </span>
+            <br/>
+            <br/>
+            <p:fileUpload style="width: 500px;" fileUploadListener="#{modifierProfilControleur.handleFileUpload}" mode="advanced" update="growl"
+            sizeLimit="300000" fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+
+        </h:form>
+    </div>        
+    </ui:define>
+</ui:composition>
+

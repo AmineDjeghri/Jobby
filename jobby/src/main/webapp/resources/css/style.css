@@ -1,0 +1,896 @@
+/*--------------------General-------------------*/
+body,h1,h2,h3,h4,p,ul{
+    margin: 0;
+    padding: 0;
+    width: 100%; 
+}
+body{
+    	font-family: arial,sherif;
+	
+	background: linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)) fixed no-repeat ,url(../resources/img/img1.jpg) fixed no-repeat center;
+	background-size: cover;	
+        
+        margin: auto;
+}
+form{
+    margin: 0;
+    padding: 0;
+}
+
+a{
+   text-decoration: none;
+   color: black;   
+}
+
+/*fonts*/
+
+
+/* liens comme login , inscription ect..*/
+.link-button{  
+    background-color: #3f51bf;
+    color: white;
+    display: inline-block;
+    height: 43px;
+    border-radius: 2px;
+    text-align: center;
+    box-shadow: 0px 8px 15px -4px rgba(0, 0,0,.42);
+  
+}
+.link-button:hover{
+background-color: #236cea;
+}
+
+/* button de submit comme Creer ect..*/
+.ui-button.ui-state-default {
+  background: #006FA2;
+  color: white;
+  border: none;
+    padding: 3px 10px;
+    font-weight: 100;
+    font-family: Roboto,sans-serif;
+    font-size: 15px;   
+    box-shadow: 2px 8px 15px -4px rgba(0, 0,0,.42);
+}
+.ui-button.ui-state-default:hover {
+  
+ 
+}
+
+
+/*menu et les items*/
+.ui-menu{
+    background: white;
+}
+.ui-menuitem { 
+   color: white;   
+}
+.ui-menuitem :hover{
+    background: transparent;
+    box-shadow: none;   
+}
+
+
+.ui-menuitem-text{
+    color: black;
+}
+ui-menuitem ui-widget ui-corner-all{
+    border: none;
+    box-shadow: none;
+}
+ui-menuitem ui-widget ui-corner-all:hover{
+    border: none;
+    box-shadow: none;
+}
+
+/*paginator of datatable, datalists ect.. */
+.ui-paginator{
+    background-color:white!important;  
+    border: 1px #DFDFDF solid;
+}
+
+.ui-paginator-page{
+    background-color:white !important;
+    border: 1px #DFDFDF solid;
+}
+      
+.ui-paginator-rpp-options{
+    background-color:white !important; 
+    border: 1px #DFDFDF solid;
+}
+/*select checkbox menu*/
+
+
+/*---------------------Header---------------------*/
+header {
+    
+    display:flex;
+    justify-content: space-between;
+    height: 75px;
+    width: 100%;
+   margin: auto;    
+}
+
+.header-for-admin{
+        background-image: url("#{resource['/img/admin-sidebar-img.jpg']}");
+        position:fixed;
+}
+
+
+
+#imgLogo{
+   display: inline-block;
+   margin-top: 10px;
+   width: 250px;
+    background-image: url("#{resource['/img/logo.jpg']}");
+    
+}
+
+header .header-links{
+    display:flex;
+    justify-content: space-between;
+}
+
+header .header-links .inscription-links{
+    display:flex;
+    justify-content:center;
+}
+
+header .header-links .inscription-links .link-button{
+     background: #006EA5;
+  margin-left:5px;
+  border-radius: 5px;
+  color: #ffffff;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  transition: 500ms;
+  margin: auto 15px;
+margin-right: 0px; 
+white-space: nowrap;
+line-height: 25px;
+font-family: Roboto,sans-serif;
+font-weight: 600;
+font-size: 13px;
+height: 25px;
+box-shadow: none;
+
+}
+header .header-links .inscription-links .link-button:hover{
+    background: #0087CC;
+  
+}
+
+
+
+#login-link{
+  background: #00A552;
+  border-radius: 5px;
+  color: #ffffff;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  transition: 500ms;
+   margin: auto 25px;
+   line-height: 25px;
+   width: 100px;
+  margin-left: 15px;
+  font-family: Roboto,sans-serif;
+font-weight: 600;
+font-size: 13px;
+height: 25px;
+box-shadow: none;
+
+}
+#login-link:hover
+{
+  background: #00CC66;
+}
+
+.profile-picture{
+    display: block;
+    margin-right: 25px;
+    margin-top: 10px;
+    border-radius: 100%; 
+}
+.profile-picture:hover{
+    cursor: pointer;
+}
+
+.submenu-title{
+    background: #F7F7F8;
+}
+
+/*-login-*/
+.login-dialog{
+    
+   
+}
+
+.login-dialog .ui-dialog-titlebar {
+    background: #4586F6;
+    margin: 10px;
+    border-radius: 5px;
+    text-align: center;
+    
+}
+
+.login-dialog .ui-dialog-title {
+    color: white;
+}
+
+.login-dialog .login-pg{
+    margin-top: 20px;
+}
+
+.login-dialog .ui-dialog-titlebar-close{
+    background: white;
+}
+.login-dialog .login-cb{
+  margin-top: 40px;
+  margin-left: 90px;
+   background: #4586F6;
+}
+
+
+
+/*--------------------content--------------------*/
+#content{
+   background: transparent;
+    min-height: 800px;
+    display: block;
+    width: 1200px;
+    margin: auto;
+}
+
+/*---------------------footer-------------------*/
+footer{
+    
+    margin: 0;
+    width:100%;
+    height:60px;   /* Height of the footer */
+    background:#6cf;
+    z-index: 10;
+}
+
+
+/*------------------------------nav--------------------*/
+
+nav{
+    margin: auto;
+    max-width: 1200px; 
+    background: rgba(136, 136, 136,0.7);
+     border:none;
+    border-radius: 5px;
+    
+   
+}
+.nav-bar{
+  background-color: transparent;
+  border: none;
+height: 40px;
+align-items: center;
+  transition: background 500ms;
+  	height: 40px;
+	display:flex;
+	align-items: center;
+    justify-content: flex-start;
+
+}
+.nav-bar .ui-menuitem-link{
+    background: none;
+     border: none;
+     box-shadow: none;
+}
+
+.nav-bar    .ui-menuitem-text {    
+    color: white;   
+}
+
+.nav-element .ui-menuitem-text
+{
+  border-radius: 0px;
+  color: #fff;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  border-bottom: solid #ffffff00 2px;
+  transition: background 500ms;
+}
+
+.nav-element:hover .ui-menuitem-text
+{ 
+  background: #ffffff30;
+  border-bottom: solid #fff 2px;
+
+}
+
+.nav-element-selected .ui-menuitem-text
+{
+  border-radius: 0px;
+  color: #fff;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  border-bottom: solid #fff 2px;
+  background: #ffffff30;
+  
+}
+
+
+
+
+
+/*---------------------------mon-compte.xhtml-----------------------*/
+.compte-menu{
+    width:200px;
+    background-color: white;
+}
+
+
+
+/*--------------------------------Admin-----------------------*/
+
+
+/*div surrouding sidebar and content*/
+.admin-panel{
+    display: flex;
+   min-height: 1000px;
+   background-color: #f7f7f8;
+  
+}
+
+/* admin sidebar*/
+.sidebar-form{
+   position: fixed;
+   background-image: url("#{resource['/img/admin-sidebar-img.jpg']}");
+   background-position: 50%;  
+   min-height: 100%;
+   width: 230px !important; 
+   z-index: 2;
+   margin-top: 75px;
+}
+.admin-sidebar{
+    border: none; 
+   background: transparent;
+}
+
+.admin-sidebar .ui-menuitem{
+   background: transparent;
+  
+    opacity: .86;
+    border-radius: 4px;
+    height: 45px;
+}
+
+.admin-sidebar .ui-menuitem:hover{   
+    background: hsla(0,0%,100%,0.2);  
+}
+
+.admin-sidebar .ui-menuitem-text{
+     color: #fff;  
+     font-weight: 600;
+     font-size: 12px;
+     margin-left: 20px;
+     line-height: 33px;
+     
+      
+}
+.admin-sidebar .ui-menuitem-icon{
+    color: #fff;
+    opacity: 0.86;
+    font-size: 25px !important;
+    display: block;
+    font-size: 30px;
+    height: 70%;
+    width: 35px;
+}
+.admin-sidebar-submenu .ui-submenu-icon{
+    color: #fff;
+    opacity: 0.86;
+    font-size: 25px !important;
+    display: block;
+    font-size: 35px;
+    height: 100%;
+    width: 35px;
+    line-height: 20px;
+}
+
+.admin-sidebar-submenu{
+    background: none;  
+    border: none;
+    color: #fff;
+    font-weight: 100;
+    font-size: 12px;
+    box-shadow: none;
+    opacity: .86;
+    border-radius: 4px;
+    height: 45px;
+    line-height: 37px;
+    padding-left: 40px;
+    
+    
+}
+
+.admin-sidebar-submenu:hover{
+    color: #fff;
+    opacity: 0.86;
+    background: hsla(0,0%,100%,0.2);   
+    border: none;
+    box-shadow: none;
+}
+
+.admin-sidebar .ui-menuitem-link{
+  height: 100%;
+}
+
+
+/*admin-content */
+.admin-content{
+    margin-left: 230px;
+    margin-top: 75px;
+    width: 100%;
+}
+.panels-stats{
+    display: flex;
+}
+.panel-stat .ui-panel-content{
+   height: 100%;
+}
+.panel-stat{
+    border-color: #DFDFDF;
+    height: 140px;
+    width: 22%;
+    min-width: 200px;
+    margin: 20px;
+    display: flex;   
+}
+
+.panel-stat .ui-panel-content {
+    width: 100%;
+}
+
+.panel-stat .ui-panel-content div:nth-child(1){
+    height: 60%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.panel-stat .ui-panel-content div:nth-child(1) div{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.panel-icon{
+    font-size: 50px;
+}
+.panel-stat .ui-panel-content div:nth-child(1) p{
+    font-size: 15px;
+    line-height: 30px;
+    color: #9a9a9a;  
+    width: auto;   
+}
+.panel-stat .ui-panel-content div:nth-child(1) h4{
+    font-size: 22px;
+    color: #333;
+    font-weight: 300;   
+    width: auto;    
+    
+}
+
+ .panel-stat .small-title{
+  font-size: 14px;
+      font-weight: 400;
+    color: #9a9a9a;
+}
+.graph-stats{
+    margin-top: 10px;
+}
+
+.graph-stats div{
+    display: flex;
+    margin: auto;
+    
+}
+.barChart{   
+  width: 500px; 
+  
+}
+.lineChart{   
+  width: 500px; 
+  float: left;
+}
+
+.pieChart{   
+  width: 500px; 
+  float: left;
+}
+
+
+
+/*------------------------------offre-Actives.xhtml-----------------------*/
+/*filter & datalist*/
+.filter-datalist{
+   
+    display: flex;
+    align-items: flex-start
+   
+}
+/*----filter panel*/
+.filter-form{
+    width: 25%;
+    min-width: 400px;
+}
+.filter-datalist .filer-panel{ 
+ margin-top: 10px;
+ margin-left: 10px;
+ margin-right: 20px;
+ height: 460px;
+ border: 1px #DFDFDF solid;
+
+}
+.filter-datalist .filer-panel .ui-panelgrid{
+    margin: 0;
+    padding: 0;
+}
+
+.filter-datalist .filer-panel input{
+border: none; 
+border-width: 0; 
+box-shadow: none;
+border-bottom: 1px solid #006FA2;
+border-radius: 0;
+color: blue;
+}
+.filter-datalist .filer-panel select{
+border-color: #006FA2;
+color:grey; 
+}
+
+.filter-datalist .filer-panel .div-submit{
+    display:block;
+    padding-top: 5px;
+   text-align: center;
+}
+.filter-datalist .filer-panel .div-submit .ui-button{
+    
+   padding: 3px 8px;
+   box-shadow: 2px 8px 10px -4px rgba(0, 0,0,.42);
+}
+
+/*-----offre datalist*/
+.liste-cvs-div{
+       width: 100%;
+    margin: auto;
+    margin-right: 10px;
+    margin-top: 0;
+}
+
+.offres-actives{
+    width: 100%;
+    margin: 0 10px 10px 0px;
+    border: none;
+}
+
+.offres-actives .ui-datalist-content{
+    border: none;
+    background: #f7f7f8; 
+}
+
+.offres-actives .offre{
+    border: 1px #DFDFDF solid;
+    padding: 10px;
+    display:block;
+    margin:10px 0;
+    background: white;
+}
+
+.offres-actives .general-details{
+   display: flex;
+   justify-content:space-between;
+}
+.offres-actives .general-details .general-informations{
+    margin-left: 0;
+    display: flex;
+}
+.offres-actives .general-details .general-informations div{
+    padding-left: 10px;
+}
+.offres-actives .general-details .gen-output{
+    display: block;
+}
+.offres-actives .titre-offre{
+    margin-bottom: 5px;
+    color: black;
+  
+}
+.offres-actives .secteur-offre,.offres-actives .nom-entreprise{
+    font-size: 15px;
+    margin-bottom: 3px;
+    margin-left: 5px;   
+}
+.offres-actives .ui-commandlink{
+    background: #006FA2;
+    color: white;
+    margin: auto 25px;
+    border-radius: 0.2rem;
+    line-height: 27px;
+    padding: 3px 16px;
+    font-family: Roboto;
+    font-size: 14px;   
+    box-shadow: 2px 8px 15px -4px rgba(0, 0,0,.42);
+}
+
+.offres-actives .ui-commandlink:hover{
+    box-shadow: 0 14px 26px -12px rgba(0, 0, 0,0.42);
+    border-color: #b8124a;
+}
+
+.offres-actives .more-details{
+    padding-left: 10px;
+    padding-top: 10px;
+}
+.offres-actives .more-details .gen-output{
+   font-size: 16px;
+   margin: 0 17px 0 3px;
+}
+
+
+/*Barre de recherche*/
+.barre-recherche-panel{
+    margin: 10px 10px 5px 10px;
+    border-color: #DFDFDF;
+    
+}
+.barre-recherche-panel h2{
+    font-family: Arial;
+    font-size: 22px;
+    font-weight: 300;
+    margin-bottom: 5px;
+}
+.barre-recherche-panel .nbre-offres-output{
+    color: #f4a30c;
+    font-size: 18px;
+    font-weight: bold;
+}
+.barre-recherche-panel span{
+    font-family: Arial;
+    font-size: 18px;
+    font-weight: 400;
+    
+}
+.barre-recherche-panel .barre-recherche{
+    display: flex;
+    justify-content:space-between;
+    margin-top: 10px;
+}
+.barre-recherche-panel .barre-recherche .recherche-input{
+   width: 100%;
+   box-shadow: none;
+   
+}
+
+.barre-recherche-panel .barre-recherche .recherche-input:hover{ 
+ border-color: #f4a30c;
+}
+.barre-recherche-panel .barre-recherche .recherche-input:focus{ 
+ border-color: #f4a30c;
+}
+.barre-recherche-panel .chercher-submit{
+     background:#f4a30c;
+  color: white;
+  margin-left: 10px;
+   box-shadow: 2px 8px 15px -4px rgba(0, 0,0,.42);
+    
+}
+.barre-recherche-panel .chercher-submit:hover{
+   background-color: #236cea;
+  color: white;
+    opacity: 0.8;    
+}
+
+
+/*-----google map*/
+.google-map{
+    
+   border: #DFDFDF solid 1px;
+   border-radius: 5px;
+   margin: 10px 10px;
+    
+   height:400px
+}
+
+/*------------------------------candidatures par offre.xhtml----------------------*/
+
+.candidature-offre {
+    display: flex;
+    padding: 10px 0;
+    justify-content: space-between;
+}
+.candidature-offre .filter-trier-div{
+    width: 25%;
+    min-width: 400px;
+    padding: 0 10px;
+}
+.candidature-offre .filter-form{
+    width: 100%;
+    min-width: 350px;
+    margin: 10px 0;
+    
+}
+.candidature-offre .trier-form{
+   margin: 10px 0 0 0;
+   width: 100%;
+   display: inline-block;
+}
+
+.candidature-offre .trier-form .slider{
+    width: 200px; background: white; box-shadow: none;
+}
+.candidature-offre .trier-form input{
+    border: none;
+}
+.candidature-offre .trier-form .div-submit{
+    display:block;
+    padding-top: 5px;
+   text-align: center;
+}
+.candidature-offre .trier-form .ui-panel-titlebar{
+    background: white;
+    text-align: center;
+}
+
+.candidature-offre .filter-form input{
+border: none; 
+border-width: 0; 
+box-shadow: none;
+border-bottom: 1px solid #006FA2;
+border-radius: 0;
+color: blue;
+}
+.candidature-offre .filter-form select{
+border-color: #006FA2;
+color:grey; 
+}
+
+.candidature-offre .filter-form .div-submit{
+    display:block;
+    padding-top: 5px;
+   text-align: center;
+}
+
+.candidature-offre .candidatures-form{
+    width: 100%;
+    margin-top: 10px;
+}
+.candidature-offre .candidatures-form .candidature{
+    margin: 0 0 15px 0;
+    padding: 10px;
+    border: solid 1px  #DFDFDF;
+    background: white;
+    display: flex;
+    justify-content:space-between;
+    
+}
+
+.candidature-offre .candidatures-form  .ui-datalist-content{
+    border: none;
+    background: #f7f7f8; 
+}
+.candidature-offre .candidatures-form .candidature .general-infos{
+    padding-top: 5px;
+    display: flex;
+    flex-direction: column;
+}
+.candidature-offre .candidatures-form .candidature .output{
+    display: block;
+}
+
+
+/* dialog consulter candidature */
+.candidature-dialog .ui-fieldset{
+    display: flex;
+    width: 500px;
+}
+.candidature-dialog .ui-fieldset .ui-fieldset-legend{
+    background: white;
+    font-family: Roboto , sans-serif;
+    font-size: 16px;
+}
+.candidature-dialog .submitActive{
+    background: 	#3CB371;
+    
+}
+
+
+/*-------------------------------liste-membres.xhtml------------------------------*/
+.membres-dataTable .ui-datatable-header{
+    background: linear-gradient(#DFDFDF,white);
+}
+.membres-dataTable th{
+    background: white;
+}
+
+/*--------------------------------mes-offres.xhtml---------------------------------*/
+.mes-candidatures{
+    margin: auto;
+}
+.mes-candidatures .fifty-percent{
+    width: 40%;
+}
+.mes-candidatures .mes-candidatures-DT{
+    margin: auto;
+    margin-top: 20px;
+    min-width: 1200px;
+}
+
+.mes-candidatures .mes-candidatures-DT th{
+   background: linear-gradient(#3a7bd5,#3a6073);
+   color: white;
+   text-shadow:none;
+}
+
+/*-------------------------Mes Cvs----------------------------*/
+.mes-cvs{
+    display: flex; justify-content: space-around;
+    margin-top: 20px;
+}
+.mes-cvs .liste-cvs-DL .ui-datalist-header{
+
+padding-top: 15px;
+padding-bottom: 18px;
+background: white;
+border-bottom: #006FA2 2px solid;
+color:#006FA2 ;
+font-size: 17px;
+font-weight: bold;
+}
+.mes-cvs .liste-cvs-DL .ui-paginator-top {
+    display: none;
+}
+
+.mes-cvs .liste-cvs-DL .ui-widget-content{
+    border: none;
+   
+}
+
+.mes-cvs .liste-cvs-DL .ui-datalist-item{
+    padding-top: 10px;
+    font-size: 17px;
+    font-weight: bold;
+}
+.mes-cvs .liste-cvs-DL .ui-datalist-item span{
+   
+   color: rgba(0, 0, 0, 0.65) !important;
+ 
+}
+
+
+
+
+
+/*---output design---*/
+.design-output{
+    font-family: Roboto, Helvetica, Arial, sans-serif; 
+    font-weight:bold;
+    color:#3c4858; 
+}
+
+
+/*-----------Landing page----------*/
+.landing-page{
+      position:absolute;
+    left:0;
+    right:0;
+}
+
+/*-------*/
+
+.selected-service-militaire .ui-button{
+    background: white;
+     
+   
+}
+.selected-service-militaire .ui-button span{
+    color:black;
+  text-shadow:none;
+}
+.selected-service-militaire div:focus {
+    background-color:#006FA2;
+}

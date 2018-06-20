@@ -1,0 +1,74 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+        <p:growl id="growl" sticky="true" showDetail="true" life="3000"  />
+        <h:outputStylesheet library="css" name="style.css"/>
+        
+        <h1>      
+            <h:link id="logoLink" outcome="/index" title="Accueil"><img id="imgLogo" src="#{resource['/img/logo.png']}" alt="Logo"/></h:link>
+        </h1>  
+        <div class="header-links">
+            
+            <div class="inscription-links">
+                <h:link id="inscription-candidat-link" class="link-button" outcome="/inscription-candidat.xhtml" rendered="#{not loginControleur.loggedIn}">inscription candidat</h:link>
+                <h:link id="inscription-recruteur-link" class="link-button" outcome="/inscription-recruteur.xhtml" rendered="#{not loginControleur.loggedIn}">inscirption recruteur</h:link>
+            </div>
+            
+            <h:outputLink id="login-link" class="link-button" value="javascript:void(0)" onclick="PF('dlg').show();" title="login" rendered="#{not loginControleur.loggedIn}"> LOGIN </h:outputLink>
+        
+            <h:form id="header-login-infos" rendered="#{loginControleur.loggedIn}">
+                <div style="display: flex; justify-content: center; align-items: flex-end;">
+                    <h:outputText value="#{loginControleur.membre.nom} #{loginControleur.membre.prenom} #{loginControleur.membre.dtype}" style=" color: white;"/>
+                    <h:graphicImage id="profile-picture" class="profile-picture" library="img" name="a.png"  width="50" height="50"/>  
+                </div>
+              
+                <p:menu overlay="true" trigger="profile-picture" my="left top" at="left bottom" class="profile-menu">
+                    <p:submenu label="Mon Compte" class="submenu-title">
+                        <p:menuitem  value="Profile" outcome="/secured/profil" />
+                        <p:menuitem value="Sécurité" outcome="/secured/securite"/>
+                        <p:menuitem value="Déconnexion" actionListener="#{loginControleur.logout}" />
+                    </p:submenu>
+                </p:menu>
+            </h:form>     
+        </div>
+    <h:form rendered="#{not loginControleur.loggedIn}">        
+        <p:dialog header="Connexion" widgetVar="dlg" resizable="false" class="login-dialog" height="270" width="350" >
+            <h:panelGrid class="login-pg" columns="2" cellpadding="5" >
+                <h:outputLabel styleClass="fa fa-user" for="Email" value=" Email:" />
+                <p:inputText id="email" value="#{loginControleur.email}" required="true" placeholder="exemple@exemple.com"  />
+ 
+                <h:outputLabel for="password" styleClass="fa fa-lock" value=" Password:" />
+                <p:password id="password" value="#{loginControleur.mdp}" required="true" placeholder="*******" />
+            
+<!--            <h:outputLabel value="se souvenir de moi" />
+            <p:selectBooleanCheckbox value="#{loginControleur.rememberMe}"/>-->
+            </h:panelGrid>
+            <div class="login-cb-div">
+                <p:commandButton style="text-align:center;" class="login-cb" value="Se connecter" update="growl" actionListener="#{loginControleur.login(event)}"
+                                 oncomplete="handleLoginRequest(xhr, status, args)" />
+            </div>
+      
+    </p:dialog>
+    </h:form>       
+<!-- script of dialog login -->
+<script type="text/javascript">
+    function handleLoginRequest(xhr, status, args) {
+        if(args.validationFailed || !args.loggedIn) {
+            PF('dlg').jq.effect("shake", {times:5}, 100);
+        }
+        else {
+            PF('dlg').hide();
+           
+        }
+    }
+</script>
+        
+  
+        
+            
+    </ui:composition>           
+
+

@@ -1,0 +1,225 @@
+<ui:composition template="/WEB-INF/template/layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">Mes Cvs</ui:define>
+
+    <ui:define name="content">
+        
+        
+        <div class="mes-offres">
+        <!--Forme qui contient la liste des offres et leur modifications-->
+        <h:form id="listOffresForm" > 
+            <!--liste des offres-->
+            <p:dataList id="offreDataList" value="#{listeOffresControleur.listeOffres}" var="offre" type="unordered" itemType="none" paginator="true" rows="10"  >
+                <f:facet name="header">Mes Offres</f:facet>
+                <h:panelGrid columns="6">
+                    <p:commandLink action="#{listeOffresControleur.updateMenus()}" styleClass="fa fa-pencil"   update="@form:offreModificationPanel @form:offreModificationPanel:competencesTable @form:offreModificationPanel:languesTable  @form:offreModificationPanel:competenceMenu @form:offreModificationPanel:langueMenu" oncomplete="PF('modifierOffreDialog').show()"  title="Détails de l'offre" style="color: #365899;   margin-right: 3px;" >
+                        <f:setPropertyActionListener value="#{offre}" target="#{listeOffresControleur.selectedOffre}" />
+                    </p:commandLink>
+                    <h:outputText value="#{offre.titre}" style="display:inline-block; width: 300px;" />  
+
+
+                    <h:commandLink value="nbr candidatures: #{listeOffresControleur.nbrCandidatures(offre.id)}" style="color: #365899; font-weight: bold;" action="/secured/espace-recruteur/candidatures-par-offre" target="_blank">
+                            <f:param name="offreId" value="#{offre.id}" />               
+                    </h:commandLink>
+                    <h:commandLink styleClass="fa fa-external-link" style="color: #365899; margin-right: 20px;" action="/secured/espace-recruteur/candidatures-par-offre" target="_blank">
+                            <f:param name="offreId" value="#{offre.id}" />               
+                    </h:commandLink>                    
+                    
+                    <p:commandButton  update="listOffresForm:gmap" icon="fa fa-map-marker"  value="Placer l'offre sur la map" onclick="PF('offreMapDialog').show();" action="#{listeOffresControleur.modifierLatLang()}" style="background: #d62d20;">
+                        <f:setPropertyActionListener value="#{offre}" target="#{listeOffresControleur.selectedOffre}"/>                
+                    </p:commandButton>     
+
+                </h:panelGrid>
+            </p:dataList>
+            
+            <!--boire de dialogue d'affichage de selection de l'emplacement de l'offre-->
+            <p:dialog id="gmapDialog" widgetVar="offreMapDialog"  modal="true" header="Placer votre offre sur la map">
+                <p:gmap id="gmap" center="36.7525000, 3.0419700" zoom="9" type="ROADMAP" style="width:600px;;height:400px"  model="#{listeOffresControleur.mapModel}">
+                    <p:ajax event="markerDrag" listener="#{listeOffresControleur.onMarkerDrag}"  update="growl" />
+                </p:gmap>
+                <p:commandButton value="Selectionner cette position" oncomplete="PF('offreMapDialog').hide();" actionListener="#{listeOffresControleur.choisirPosition()}" style="margin-top: 5px;"/>
+                <p:ajax event="close" update="growl" listener="#{listeOffresControleur.handleClose}" />
+            </p:dialog>
+            
+            
+            <!--boite de dialogue de modification de l'offre-->
+            <p:dialog header="Offre Info" widgetVar="modifierOffreDialog" modal="true" showEffect="blind" hideEffect="explode" resizable="false">
+                <p:outputPanel id="offreModificationPanel" style="text-align:center;">
+                    <h:panelGrid  columns="2"  >
+                        <h:outputLabel value="titre de l'offre"/>
+                        <h:inputText value="#{listeOffresControleur.selectedOffre.titre}"/>
+                        <h:outputText value="offre active (visible):" />
+                        <h:selectBooleanCheckbox value="#{listeOffresControleur.selectedOffre.active}"/>
+                    
+                    
+                        <h:outputLabel  value="Type de contrat" />
+                        <p:selectOneMenu  id="typeContratMenu" value="#{listeOffresControleur.selectedOffre.typeContratEnum}">
+                            <f:selectItems value="#{listeOffresControleur.typeContratEnum}"  var="typeContrat" itemLabel="#{typeContrat.nomTypeContrat}"/>
+                        </p:selectOneMenu>   
+                        
+                        <h:outputText value="Salaire" />
+                        <p:inputNumber value="#{listeOffresControleur.selectedOffre.salaire}"/>
+                        
+                        <h:outputText value="Adresse" />
+                        <h:inputText value="#{listeOffresControleur.selectedOffre.adresse}"/>
+                        
+                        <h:outputText value="Année d'experience requis" />
+                        <p:inputNumber value="#{listeOffresControleur.selectedOffre.anneeExperience}"/>
+                        
+                        <h:outputText value="Niveau d'étude requis" />
+                        <p:selectOneMenu  id="niveauEtudeMenu" value="#{listeOffresControleur.selectedOffre.niveauEtudeEnum}">
+                            <f:selectItems value="#{listeOffresControleur.niveauEtudeEnum}"  var="niveauEtude" itemLabel="#{niveauEtude.nomNiveauEtude}"/>
+                        </p:selectOneMenu>     
+                        
+                        <h:outputText value="Secteur d'activité" />
+                        <p:selectOneMenu  id="secteurActiviteMenu" value="#{listeOffresControleur.selectedOffre.secteurActivite}">
+                            <f:selectItems value="#{listeOffresControleur.listeSecteursActivite}" var="secteurActivite" itemLabel="#{secteurActivite.nomSecteurActivite}"/>
+                        </p:selectOneMenu> 
+                        
+                        <h:outputText value="Description" />
+                        <h:inputTextarea value="#{listeOffresControleur.selectedOffre.description}"/>
+            
+                    </h:panelGrid>    
+                    <h:panelGrid  columns="3"  >
+                        <h:outputLabel  value="langue requise" />
+                        <p:selectOneMenu  id="langueMenu" value="#{listeOffresControleur.selectedLangue}">
+                            <f:selectItems value="#{listeOffresControleur.listeLangueEnum}"/>
+                        </p:selectOneMenu>                              
+                        <p:commandButton  value="Add" update="languesTable  langueMenu" actionListener="#{listeOffresControleur.addLangue()}" />
+                        
+                        <h:outputLabel  value="compétence requise" />
+                        <p:selectOneMenu  id="competenceMenu" value="#{listeOffresControleur.selectedCompetence}">
+                            <f:selectItems value="#{listeOffresControleur.listeCompetences}" var="competence" itemLabel="#{competence.nomCompetence}"/>
+                        </p:selectOneMenu>                              
+                        <p:commandButton  value="Add" update="competencesTable  competenceMenu" actionListener="#{listeOffresControleur.addCompetence()}" />
+                    
+                    </h:panelGrid>
+                    </p:outputPanel>  
+                
+                    <p:outputPanel>
+                        <p:dataTable id="languesTable" value="#{listeOffresControleur.selectedOffre.listeLangues_offre}" var="langue" >                    
+                           <p:column headerText="Langues requise">
+                               <h:outputText value="#{langue.langueEnum}" />
+                           </p:column>    
+                            <p:column headerText="niveau requis">
+                                <p:rating value="#{langue.niveauLangue}" />
+                            </p:column>  
+                        </p:dataTable>
+   
+                        <p:dataTable id="competencesTable"  value="#{listeOffresControleur.selectedOffre.listeCompetences_offre}" var="competence" >                    
+                            <p:column headerText="Competences requises">
+                                <h:outputText value="#{competence.competence.nomCompetence}" />
+                            </p:column> 
+                            
+                            <p:column headerText="niveau requis">
+                                <p:rating value="#{competence.niveauCompetence}" />
+                            </p:column>                              
+                        </p:dataTable>  
+                    </p:outputPanel>                 
+                              
+                    <p:commandButton action="#{listeOffresControleur.modifierOffre()}" update="@form growl" value="enregistrer"/>                    
+                 
+               <p:ajax event="close" update="growl" listener="#{listeOffresControleur.handleClose}" />
+            </p:dialog>
+        </h:form>     
+          
+        <!--Forme Création de l'offre -->
+        <h:form id="creationOffreForm">                
+            <!--Creer un cv boutton-->
+            <p:commandButton update="@form:offreCreationPanel" oncomplete="PF('creerOffreDialog').show()" title="View Detail" value="Creer une nouvelle offre" style="background:#365899; margin-top: 5px;"/>
+            
+            <!--boite de dialogue de création d'offre-->
+            <p:dialog header="Offre info" widgetVar="creerOffreDialog" modal="true" showEffect="blind" hideEffect="explode" resizable="false">
+                    <p:outputPanel id="offreCreationPanel" style="text-align:center;">
+                    <h:panelGrid  columns="2"  >
+                        <h:outputText value="titre de l'offre" />
+                        <h:inputText value="#{creerOffreControleur.offre.titre}"/>
+                       
+                        <h:outputText value="offre active (visible):" />
+                        <h:selectBooleanCheckbox value="#{creerOffreControleur.offre.active}"/>
+                        
+                        <h:outputLabel  value="Type de contrat" />
+                        <p:selectOneMenu  id="typeContratMenu" value="#{creerOffreControleur.offre.typeContratEnum}">
+                            <f:selectItems value="#{creerOffreControleur.typeContratEnum}" var="typeContrat" itemLabel="#{typeContrat.nomTypeContrat}"/>
+                        </p:selectOneMenu>   
+                        
+                        <h:outputText value="Salaire" />
+                        <p:inputNumber value="#{creerOffreControleur.offre.salaire}"/>
+                        
+                        <h:outputText value="Adresse" />
+                        <h:inputText value="#{creerOffreControleur.offre.adresse}"/>
+                        
+                        <h:outputText value="Année d'experience requis" />
+                        <p:inputNumber value="#{creerOffreControleur.offre.anneeExperience}"/>
+                        
+                        <h:outputText value="Niveau d'étude requis" />
+                        <p:selectOneMenu  id="niveauEtudeMenu" value="#{creerOffreControleur.offre.niveauEtudeEnum}">
+                            <f:selectItems value="#{creerOffreControleur.niveauEtudeEnum}" var="niveauEtude" itemLabel="#{niveauEtude.nomNiveauEtude}"/>
+                        </p:selectOneMenu>     
+                        
+                        <h:outputText value="Secteur d'activité" />
+                        <p:selectOneMenu  id="secteurActiviteMenu" value="#{creerOffreControleur.offre.secteurActivite}">
+                            <f:selectItems value="#{creerOffreControleur.listeSecteursActivite}" var="secteurActivite" itemLabel="#{secteurActivite.nomSecteurActivite}"/>
+                        </p:selectOneMenu> 
+                        
+                        <h:outputText value="Description" />
+                        <h:inputTextarea value="#{creerOffreControleur.offre.description}"/>
+            
+                    </h:panelGrid>    
+                    <h:panelGrid  columns="3"  >
+                        <h:outputLabel  value="langue requise" />
+                        <p:selectOneMenu  id="langueMenu" value="#{creerOffreControleur.selectedLangue}">
+                            <f:selectItems value="#{creerOffreControleur.listeLangueEnum}"/>
+                        </p:selectOneMenu>                              
+                        <p:commandButton  value="Add" update="languesTable  langueMenu" actionListener="#{creerOffreControleur.addLangue()}" />
+                        
+                        <h:outputLabel  value="compétence requise" />
+                        <p:selectOneMenu  id="competenceMenu" value="#{creerOffreControleur.selectedCompetence}">
+                            <f:selectItems value="#{creerOffreControleur.listeCompetences}" var="competence" itemLabel="#{competence.nomCompetence}"/>
+                        </p:selectOneMenu>                              
+                        <p:commandButton  value="Add" update="competencesTable  competenceMenu" actionListener="#{creerOffreControleur.addCompetence()}" />
+                    
+                    </h:panelGrid>
+                    </p:outputPanel>  
+                
+                    <p:outputPanel>
+                        <p:dataTable id="languesTable" value="#{creerOffreControleur.offre.listeLangues_offre}" var="langue" >                    
+                           <p:column headerText="Langues requise">
+                               <h:outputText value="#{langue.langueEnum}" />
+                           </p:column>    
+                            <p:column headerText="niveau requis">
+                                <p:rating value="#{langue.niveauLangue}" />
+                            </p:column>  
+                        </p:dataTable>
+   
+                        <p:dataTable id="competencesTable"  value="#{creerOffreControleur.offre.listeCompetences_offre}" var="competence" >                    
+                            <p:column headerText="Competences requises">
+                                <h:outputText value="#{competence.competence.nomCompetence}" />
+                            </p:column> 
+                            
+                            <p:column headerText="niveau requis">
+                                <p:rating value="#{competence.niveauCompetence}" />
+                            </p:column>                              
+                        </p:dataTable>  
+                    </p:outputPanel>
+         
+                <p:commandButton value="Creer" action="#{creerOffreControleur.creerOffre()}" update="@form :listOffresForm growl"/>
+  
+            </p:dialog>  
+       
+        </h:form>
+        
+        </div>
+        <script src="http://maps.google.com/maps/api/js?key=AIzaSyDyAYIzXtDhupssobB4r6ZkGMkF2SXs2r0" type="text/javascript"></script>
+
+
+
+
+    </ui:define>
+</ui:composition>
+

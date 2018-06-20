@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title><ui:insert name="title">Default title</ui:insert></title>
+        <h:outputStylesheet library="css" name="style.css"/>
+    </h:head>
+    <h:body>
+        <header class="header-for-admin"><ui:include src="/WEB-INF/template/header.xhtml"/> </header>
+        <div class="admin-panel" >
+            <h:form class="sidebar-form">
+                    <p:menu class="admin-sidebar" toggleable="true" >            
+                        <p:menuitem icon="fa fa-dashboard"  value="DASHBOARD" outcome="/secured/espace-admin/dashboard.xhtml"/>
+                        <p:submenu icon="fa fa-users" class="admin-sidebar-submenu" label="COMPTES">
+                            <p:menuitem value="Tous les comptes" outcome="/secured/espace-admin/liste-membres"/>    
+                            <p:menuitem value="Recruteurs" outcome="/secured/espace-admin/liste-recruteurs"/>
+                            <p:menuitem  value="Candidats" outcome="/secured/espace-admin/liste-candidats"/>
+                        </p:submenu>
+                        <p:menuitem icon="fa fa-cubes" value="SECTEURS D'ACTIVITE" outcome="/secured/espace-admin/liste-secteurs-activite.xhtml"/>
+                        <p:menuitem icon="fa fa-star-half-o" value="COMPETENCES" outcome="/secured/espace-admin/liste-competences.xhtml"/>
+
+                        <p:menuitem icon="fa fa-newspaper-o" value="OFFRES" outcome="/secured/espace-admin/liste-offres-for-admin"/>
+                        <p:menuitem icon="fa fa-newspaper-o" value="DATES DES OFFRES" outcome="/secured/espace-admin/liste-offres-dates-for-admin"/>
+                        <p:menuitem icon="fa fa-file-text" value="CVS" outcome="/secured/espace-admin/liste-cvs-for-admin"/>
+                        <p:menuitem icon="fa fa-file-text" value="Candidatures" outcome="/secured/espace-admin/liste-candidatures"/>
+
+                    </p:menu> 
+                
+               
+            </h:form>
+            
+            <div class="admin-content"><ui:insert name="admin-content">Default content</ui:insert></div>    
+        </div>
+        
+
+            
+             
+    </h:body>
+</html>

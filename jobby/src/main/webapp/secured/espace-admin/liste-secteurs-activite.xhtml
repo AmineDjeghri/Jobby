@@ -1,0 +1,48 @@
+<ui:composition template="/WEB-INF/template/admin-layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">Gestion des Secteurs d'activité</ui:define>
+
+    <ui:define name="admin-content">
+        <h:form id="listeSecteursForm"> 
+        
+            <p:dataTable id="secteursActiviteDataTable" sortBy="#{secteurActivite.nomSecteurActivite}" editable="true" value="#{listeSecteursActiviteControleur.listeSecteurs}" var="secteurActivite">
+                <p:column headerText="Nom du secteur d'activité" filterBy="#{secteurActivite.nomSecteurActivite}" filterMatchMode="contains">
+                    
+               
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{secteurActivite.nomSecteurActivite}" /></f:facet>
+                    <f:facet name="input"><p:inputText id="modelInput" required="true" requiredMessage="impossible de creer un secteur sans nom" value="#{secteurActivite.nomSecteurActivite}" /></f:facet>
+               </p:cellEditor>
+                     </p:column>
+                
+                <p:ajax event="rowEdit" listener="#{listeSecteursActiviteControleur.onRowEdit}" update="growl" />
+                <p:ajax event="rowEditCancel" listener="#{listeSecteursActiviteControleur.onRowCancel}" update="growl" />
+                
+                <p:column >
+                    <p:rowEditor />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        <h:form>
+            <p:commandButton update="@form" oncomplete="PF('creerSecteurDialog').show()"  value="Creer un secteur d'activité"/>
+            <p:dialog widgetVar="creerSecteurDialog" id="creerSecteurDialog">
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="Nom du Secteur D'activité"/>
+                    <p:inputText placeholder="ex: Medecine" required="true"  requiredMessage="impossible de creer un secteur sans nom" value="#{listeSecteursActiviteControleur.nouveauSecteurActivite.nomSecteurActivite}"/>
+                
+                </h:panelGrid>  
+                <p:commandButton value="Creer" update="@form :listeSecteursForm growl" action="#{listeSecteursActiviteControleur.creerSecteurActivite()}"/>
+            </p:dialog>
+
+            
+        </h:form>
+        
+
+
+    </ui:define>
+</ui:composition>

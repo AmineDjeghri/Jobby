@@ -1,0 +1,99 @@
+<ui:composition template="/WEB-INF/template/admin-layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">Gestion des Candidats</ui:define>
+
+    <ui:define name="admin-content">
+    <h:form> 
+        
+        
+    
+        
+        <p:dataTable id="candidatsDataTable" widgetVar="candidatsDataTable" sortBy="#{candidat.id}"   value="#{listeCandidatsControleur.listeCandidats}" var="candidat" editable="true" >
+            
+            
+            <f:facet name="header" class="column-header">
+               Tous les candidats
+            </f:facet>
+            <f:facet name="header">
+                <p:outputPanel>
+                    <h:outputText value="Search all fields:" />
+                    <p:inputText id="globalFilter" onkeyup="PF('candidatsDataTable').filter()"  style="width:150px" placeholder="Entrer un mot clé"/>
+                </p:outputPanel>
+            </f:facet>    
+
+            <p:ajax event="rowEdit" listener="#{listeCandidatsControleur.onRowEdit}" update="growl" />
+            <p:ajax event="rowEditCancel" listener="#{listeCandidatsControleur.onRowCancel}" update="growl" />
+
+            <p:column headerText="Id" filterBy="#{candidat.id}" filterMatchMode="contains" sortBy="#{candidat.id}">
+                <h:outputText value="#{candidat.id}" />
+            </p:column>
+
+            <p:column headerText="Nom" filterBy="#{candidat.nom}" filterMatchMode="contains" sortBy="#{candidat.nom}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{candidat.nom}" /></f:facet>
+                    <f:facet name="input"><h:inputText value="#{candidat.nom}" style="width:100%" /></f:facet>
+                </p:cellEditor>
+            </p:column>
+            
+            <p:column headerText="Prénom" filterBy="#{candidat.prenom}" filterMatchMode="contains" sortBy="#{candidat.prenom}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{candidat.prenom}" /></f:facet>
+                    <f:facet name="input"><h:inputText value="#{candidat.prenom}" style="width:100%" /></f:facet>
+                </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="Numéro du cv Actif" filterBy="#{candidat.cvActif}" filterMatchMode="contains" sortBy="#{candidat.cvActif.id}">
+                <h:outputText  value="#{candidat.cvActif}" />          
+            </p:column>   
+            <p:column headerText="Adresse" filterBy="#{candidat.adresseCandidat}" filterMatchMode="contains" sortBy="#{candidat.adresseCandidat}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{candidat.adresseCandidat}" /></f:facet>
+                    <f:facet name="input"><h:inputText value="#{candidat.adresseCandidat}" /></f:facet>
+                </p:cellEditor>
+            </p:column>
+            
+            <p:column headerText="Téléphone" filterBy="#{candidat.telCondidat}" filterMatchMode="contains" sortBy="#{candidat.telCondidat}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{candidat.telCondidat}" /></f:facet>
+                    <f:facet name="input"><p:inputMask mask="9999 99 99 99" value="#{candidat.telCondidat}"/></f:facet>
+                </p:cellEditor>
+            </p:column>
+            
+            <p:column headerText="Service Militaire" filterBy="#{candidat.serviceMilitaire}" filterMatchMode="contains" sortBy="#{candidat.serviceMilitaire}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:selectBooleanCheckbox disabled="true" value="#{candidat.serviceMilitaire}" /></f:facet>
+                    <f:facet name="input"><h:selectBooleanCheckbox  value="#{candidat.serviceMilitaire}"/></f:facet>
+                </p:cellEditor>
+            </p:column>
+            
+            <p:column headerText="Situation Familiale" filterBy="#{candidat.situationFamilialeEnum}" filterMatchMode="contains" sortBy="#{candidat.situationFamilialeEnum}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{candidat.situationFamilialeEnum}" /></f:facet>
+                    <f:facet name="input">
+                        <h:selectOneMenu value="#{candidat.situationFamilialeEnum}" style="width:100%">
+                            <f:selectItems value="#{listeCandidatsControleur.situationFamilialeEnums}"  />
+                        </h:selectOneMenu>   
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>            
+            
+            
+            <p:column  headerText="Modif">
+                <p:rowEditor />
+            </p:column>
+            
+
+          
+        </p:dataTable>
+
+    
+    </h:form>
+        
+
+    </ui:define>
+</ui:composition>

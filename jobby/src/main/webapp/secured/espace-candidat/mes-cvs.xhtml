@@ -1,0 +1,513 @@
+<ui:composition template="/WEB-INF/template/layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">Mes Cvs</ui:define>
+
+    <ui:define name="content">
+        <div class="mes-cvs">
+
+            <div style="background: white; width: 35%; border-radius: 5px;">
+                <div style="display: flex; justify-content: space-between; padding: 5px;  ">
+                    <h:outputText value="Informations personnelles" style="color: #006FA2; font-size: 17px; display: inline-block; margin-top: 10px; font-weight: bold; display: inline-block; margin: auto; padding-top: 5px;"/>
+                    <h:link styleClass="fa fa-pencil-square-o" style="color: #006FA2; margin-top: 8px; font-size: 25px;" title="modifier" outcome="/secured/profil.xhtml"/>                
+                </div>
+                <hr style="border: #006FA2 1px solid; margin-left: 5px; margin-right: 5px;"/>
+                <h:form id="choixCvActifForm">
+                    <h:panelGrid columns="2" style="background: white;" cellspacing="10">  
+                        <h:outputLabel value="Nom et Prénom "  /> 
+                        <h:outputText value="#{listeCvsControleur.candidat.nom} #{listeCvsControleur.candidat.prenom}" style="color: rgba(0, 0, 0, 0.65);"/> 
+
+                        <h:outputLabel value="Date de naissance "  /> 
+                        <h:outputText value="#{listeCvsControleur.candidat.dateNaissance}" style="color: rgba(0, 0, 0, 0.65);">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText> 
+
+                        <h:outputLabel value="Adresse "/> 
+                        <h:outputText value="#{listeCvsControleur.candidat.adresseCandidat}" style="color: rgba(0, 0, 0, 0.65);"/> 
+
+                        <h:outputLabel value="Téléphone "/> 
+                        <h:outputText value="#{listeCvsControleur.candidat.telCondidat}" style="color: rgba(0, 0, 0, 0.65);"/> 
+
+                        <h:outputLabel value="Email " /> 
+                        <h:outputText value="#{listeCvsControleur.candidat.email}" style="color: rgba(0, 0, 0, 0.65);"/>     
+
+                        <h:outputLabel value="Service militaire " /> 
+                        <h:outputText value="#{listeCvsControleur.candidat.serviceMilitaire eq true? 'Oui' : 'Non'}" style="color: rgba(0, 0, 0, 0.65);"/>    
+
+                        <h:outputLabel value="Situation familiale " /> 
+                        <h:outputText value="#{listeCvsControleur.candidat.situationFamilialeEnum}" style="color: rgba(0, 0, 0, 0.65);"/>    
+                    </h:panelGrid>
+                    <h:panelGrid columns="3">
+                        <p:outputLabel for="cvActiv" value="Cv Actif" style="margin-left: 10px;"/>
+                        <h:selectOneMenu id="cvActiv" value="#{listeCvsControleur.cvActif}" converter="#{cvConverter}" >
+                                <f:selectItem itemLabel="aucun cv visible" value="#{null}"/>
+                                <f:selectItems value="#{listeCvsControleur.listeCvs}" var="ca" itemLabel="#{ca.titreCv}"/>
+                        </h:selectOneMenu>      
+                        <p:commandButton value="Choisir ce cv" action="#{listeCvsControleur.choisirCvActif()}" update="@form growl" style="background: white; color: black; border: #006FA2 solid 0.5px;  box-shadow: none;"/>           
+                    </h:panelGrid>
+                </h:form> 
+            </div> 
+
+            <div class="liste-cvs-div" style="width: 600px;">
+            <!--Forme qui contient la liste des cvs et leur modifications-->
+            <h:form id="listCvsForm"> 
+                <!--liste des Cvs-->
+                <p:dataList id="cvDataList" class="liste-cvs-DL" value="#{listeCvsControleur.listeCvs}" var="cv" type="unordered" itemType="none" paginator="true" rows="10" >
+                    <f:facet name="header">Mes CVs</f:facet>
+                    <div class="mon-cv" style="margin: auto 15px;  display: flex; justify-content: space-between;">
+                        <h:outputText value="#{cv.titreCv}" style="display:inline-block; color: black;"/>
+
+                        <p:commandLink action="#{listeCvsControleur.updateSelectMenus()}"  update="@form:cvModificationPanel @form:cvModificationPanel2 @form:cvModificationPanel3 @form:cvModificationPanel3:liensTable @form:cvModificationPanel3:publicationsTable @form:cvModificationPanel2:languesTable @form:cvModificationPanel2:experiencesTable @form:cvModificationPanel2:formationsTable @form:cvModificationPanel2:competencesTable"  oncomplete="PF('modifCvDialog').show()" title="View Detail" styleClass="fa fa-pencil" style=" color:#365899; " >
+                            <f:setPropertyActionListener value="#{cv}" target="#{listeCvsControleur.selectedCv}" />
+                        </p:commandLink>
+                    </div>    
+                </p:dataList>
+
+                <!--boite de dialogue de modification de cv-->
+                <p:dialog header="CV Info" widgetVar="modifCvDialog" modal="true" showEffect="blind" hideEffect="explode" >
+                    <p:outputPanel id="cvModificationPanel" style="text-align:center;">
+                        <p:panelGrid  columns="2"  >
+                            <h:outputLabel value="titre cv"/>
+                            <h:inputText value="#{listeCvsControleur.selectedCv.titreCv}"/>  
+
+                            <h:outputLabel  value="Secteur d'activité" />
+                            <p:selectOneMenu  id="SecteurActiviteMenu" value="#{listeCvsControleur.selectedCv.secteurActivite}">
+                                <f:selectItems value="#{listeCvsControleur.listeSecteursActivite}" var="secteurActivite" itemLabel="#{secteurActivite.nomSecteurActivite}"/>
+                            </p:selectOneMenu>  
+
+                            <h:outputLabel  value="Niveau du poste" />
+                            <p:selectOneMenu  id="NiveauPosteMenu" value="#{listeCvsControleur.selectedCv.niveauPosteEnum}">
+                                <f:selectItems value="#{listeCvsControleur.niveauPosteEnum}"/>
+                            </p:selectOneMenu>  
+
+                            <h:outputLabel  value="Années d'experience" />
+                            <p:inputText  id="anneeExperience" value="#{listeCvsControleur.selectedCv.anneeExperience}" >
+                                <f:convertNumber integerOnly="true"/>    
+                            <f:ajax event="blur" render="growl" />
+                            </p:inputText>
+
+                            <h:outputLabel  value="Niveau d'étude" />
+                            <p:selectOneMenu id="niveauEtudeMenu" value="#{listeCvsControleur.selectedCv.niveauEtudeEnum}" >
+                                <f:selectItems  value="#{listeCvsControleur.niveauEtudeEnum}"/>
+                            </p:selectOneMenu>
+
+                        </p:panelGrid>    
+                    </p:outputPanel>   
+                    <p:commandButton value="Suivant"  oncomplete=" PF('modifCvDialog2').show(); PF('modifCvDialog').hide();"  />
+                </p:dialog>  
+
+                <p:dialog header="CV info" widgetVar="modifCvDialog2" modal="true" responsive = "true">
+                    <p:outputPanel id="cvModificationPanel2">
+                        <h:panelGrid columns="2">
+                            <p:outputPanel id="infosFormation">
+                                <h:outputLabel value="Ajouter une formation"/>
+                                <p:panelGrid  columns="2"  >
+                                    <h:outputText value="titre de la formation" />
+                                    <h:inputText value="#{listeCvsControleur.selectedFormation.titreFormation}"/>
+
+                                    <p:outputLabel value="Date de début"  for="dateDebutFormation" />
+                                    <p:calendar id="dateDebutFormation" navigator="true" yearRange="c-100:c+0" value="#{listeCvsControleur.selectedFormation.dateDebut}">
+                                    </p:calendar>
+
+                                    <p:outputLabel value="Date de fin"  for="dateFinFormation" />
+                                    <p:calendar id="dateFinFormation" navigator="true" yearRange="c-100:c+0" value="#{listeCvsControleur.selectedFormation.dateFin}">
+                                    </p:calendar> 
+                                    <h:outputText value="niveau de la formation" />        
+                                    <p:selectOneMenu id="niveauFormationMenu" value="#{listeCvsControleur.selectedFormation.niveauEtude}" >
+                                        <f:selectItems  value="#{listeCvsControleur.niveauEtudeEnum}"/>
+                                    </p:selectOneMenu>
+
+                                    <h:outputText value="nom de l'établissement" />
+                                    <h:inputText value="#{listeCvsControleur.selectedFormation.nomEtablissement}"/>
+
+                                    <h:outputText value="Description" />
+                                    <h:inputText value="#{listeCvsControleur.selectedFormation.description}"/>
+                                </p:panelGrid>
+
+                                <p:commandButton value="Add" update="infosFormation  formationsTable" actionListener="#{creerCvControleur.addFormation()}" />                            
+                            </p:outputPanel>
+
+                            <p:outputPanel id="infosExperience">
+                                <h:outputLabel value="Ajouter une experience"/>
+                                <p:panelGrid  columns="2"  >
+                                    <h:outputText value="titre du poste" />
+                                    <h:inputText value="#{listeCvsControleur.selectedExperience.titrePoste}"/>
+
+                                    <p:outputLabel value="Date de début"  for="dateDebutExperience" />
+                                    <p:calendar id="dateDebutExperience" navigator="true" yearRange="c-100:c+0" value="#{listeCvsControleur.selectedExperience.dateDebut}">
+                                    </p:calendar>
+
+                                    <p:outputLabel value="Date de fin"  for="dateFinExperience" />
+                                    <p:calendar id="dateFinExperience" navigator="true" yearRange="c-100:c+0" value="#{listeCvsControleur.selectedExperience.dateFin}">
+                                    </p:calendar> 
+                                    <h:outputText value="niveau de la formation" />        
+                                    <p:selectOneMenu id="niveauPoseMenu" value="#{listeCvsControleur.selectedExperience.niveauPosteEnum}" >
+                                        <f:selectItems  value="#{listeCvsControleur.niveauPosteEnum}"/>
+                                    </p:selectOneMenu>
+
+                                    <h:outputText value="nom de l'entreprise" />
+                                    <h:inputText value="#{listeCvsControleur.selectedExperience.nomEntreprise}"/>
+
+                                    <h:outputText value="description" />
+                                    <h:inputText value="#{listeCvsControleur.selectedExperience.description}"/>
+                                </p:panelGrid>
+
+                                <p:commandButton value="Add" update="infosExperience  experiencesTable" actionListener="#{listeCvsControleur.addExperience()}" />                            
+                            </p:outputPanel>
+                        </h:panelGrid>    
+                        <p:panelGrid  columns="3"  >
+                            <h:outputLabel  value="langues" />
+                            <p:selectOneMenu  id="langueMenu" value="#{listeCvsControleur.selectedLangue}">
+                                <f:selectItems value="#{listeCvsControleur.listeLangueEnums}"/>
+                            </p:selectOneMenu>                        
+                            <p:commandButton value="Add" update="languesTable  langueMenu" actionListener="#{listeCvsControleur.addLangue()}" />
+
+                            <h:outputLabel  value="competences" />
+                            <p:selectOneMenu id="competenceMenu" value="#{listeCvsControleur.selectedCompetence}" >
+                                <f:selectItems  value="#{listeCvsControleur.listeCompetences}" var="competence" itemLabel="#{competence.nomCompetence}"/>
+                            </p:selectOneMenu>
+                            <p:commandButton value="Add" update="competencesTable competenceMenu" actionListener="#{listeCvsControleur.addCompetence()}" />                        
+
+                        </p:panelGrid>
+                     </p:outputPanel>    
+
+                    <p:outputPanel>
+
+                        <p:dataTable id="formationsTable" value="#{listeCvsControleur.selectedCv.listeFormations}" var="formation" >
+                            <p:column headerText="Diplomes et Formations">
+                                <h:outputText value="#{formation.titreFormation}" />
+                            </p:column>    
+                            <p:column headerText="Niveau d'étude">
+                                <p:outputLabel value="#{formation.niveauEtude}" />
+                            </p:column>  
+                        </p:dataTable>                    
+
+                        <p:dataTable id="experiencesTable" value="#{listeCvsControleur.selectedCv.listeExperiences}" var="experience" >
+                            <p:column headerText="Vos Experiences">
+                                <h:outputText value="#{experience.niveauPosteEnum}" />
+                            </p:column>    
+                            <p:column headerText="Nom de l'enreprise">
+                                <p:outputLabel value="#{experience.nomEntreprise}" />
+                            </p:column>  
+                        </p:dataTable> 
+
+                        <p:dataTable id="languesTable" value="#{listeCvsControleur.selectedCv.listeLangues_cv}" var="langue" >
+                            <p:column headerText="Vos Langues">
+                                <h:outputText value="#{langue.langueEnum}" />
+                            </p:column>    
+                            <p:column headerText="niveau">
+                                <p:rating value="#{langue.niveauLangue}" />
+                            </p:column>  
+                        </p:dataTable>
+
+                        <p:dataTable id="competencesTable" value="#{listeCvsControleur.selectedCv.listeCompetences_cv}" var="competence" >
+                            <p:column headerText="Vos compétences">
+                                <h:outputText value="#{competence.competence.nomCompetence}"/>
+                            </p:column>    
+                            <p:column headerText="Niveau">
+                                <p:rating value="#{competence.niveauCompetence}" />
+                            </p:column>  
+                        </p:dataTable>                
+                    </p:outputPanel>
+
+                    <p:commandButton value="Retour"  oncomplete=" PF('modifCvDialog').show(); PF('modifCvDialog2').hide();"  />
+                    <p:commandButton value="Suivant"  oncomplete=" PF('modifCvDialog3').show(); PF('modifCvDialog2').hide();"  />
+                </p:dialog>                         
+
+                <p:dialog header="CV info" widgetVar="modifCvDialog3" modal="true" responsive = "true">
+                    <p:outputPanel id="cvModificationPanel3">
+                        <p:outputPanel id="infosLien">
+                            <h:outputText value="Reseaux Sociaux" />
+                            <p:panelGrid columns="2">
+                                <h:outputText value="url" />
+                                <h:inputText value="#{listeCvsControleur.selectedLien.url}"/>     
+                            </p:panelGrid>
+                            <p:commandButton value="Add" update="liensTable infosLien" actionListener="#{listeCvsControleur.addLien()}" />     
+                        </p:outputPanel>
+
+                        <p:outputPanel id="infosPublication">
+                            <h:outputText value="Ajoutez les liens de vos publications" />
+                            <p:panelGrid columns="2">
+                                <h:outputText value="titre de la publication" />
+                                <h:inputText value="#{listeCvsControleur.selectedPublication.titre}"/>     
+
+                                <h:outputText value="lien de publication" />
+                                <h:inputText value="#{listeCvsControleur.selectedPublication.url}"/>  
+
+                            </p:panelGrid>
+                            <p:commandButton value="Add" update="publicationsTable infosPublication" actionListener="#{listeCvsControleur.addPublication()}" />     
+                        </p:outputPanel>
+
+                        <p:outputPanel>
+                            <h:outputLabel value="qualités humaines"/>
+                            <h:inputText value="#{listeCvsControleur.selectedCv.qualitesHumaines}"/> 
+
+                            <h:outputText value="Informations complémentaires:" />
+                            <h:inputText value="#{listeCvsControleur.selectedCv.informationsComplementaires}"/> 
+
+                            <h:outputLabel  value="Situation Actuelle" />
+                            <p:selectOneMenu id="situationActuelleMenu" value="#{listeCvsControleur.selectedCv.situationActuelle}"  >
+                                <f:selectItems  value="#{listeCvsControleur.situationActuelleEnum}" var="situationActuelle" itemLabel="#{situationActuelle.nomSituation}"/>
+                            </p:selectOneMenu>
+
+                        </p:outputPanel>
+
+                        <p:outputPanel>
+                            <p:dataTable id="liensTable" value="#{listeCvsControleur.selectedCv.listeLiens}" var="lien" >
+                                <p:column headerText="Liens des reseaux sociaux">
+                                    <h:outputText value="#{lien.url}" />
+                                </p:column>    
+                            </p:dataTable>   
+                            <p:dataTable id="publicationsTable" value="#{listeCvsControleur.selectedCv.listePublications}" var="publication" >
+                                <p:column headerText="Titres des publications">
+                                    <h:outputText value="#{publication.titre}" />
+                                </p:column> 
+                                <p:column headerText="Lien des publications">
+                                    <h:outputText value="#{publication.url}" />
+                                </p:column>    
+                            </p:dataTable>   
+                        </p:outputPanel>
+
+                        <p:commandButton value="Retour"  oncomplete=" PF('modifCvDialog2').show(); PF('modifCvDialog3').hide();"  />
+                        <p:commandButton action="#{listeCvsControleur.modifierCv()}" value="enregistrer" update="growl @form choixCvActifForm"/>                    
+                    </p:outputPanel>     
+                    <p:ajax event="close" update="growl" listener="#{listeCvsControleur.handleClose}" />
+                </p:dialog>  
+            </h:form>
+
+
+
+            <!--Form Création de CV -->
+            <h:form id="creationCvForm">                
+                <!--Creer un cv boutton-->
+                <p:commandButton update="@form:cvCreationPanel" oncomplete="PF('cvDialog').show()" title="View Detail" value="Creer un CV"/>
+
+                <!--boites de dialogue de création de cv-->            
+                <p:dialog header="Création d'un nouveau CV" widgetVar="cvDialog" modal="true" responsive = "true" >
+                    <p:outputPanel >
+                        <h:panelGrid  columns="2"  >
+
+                            <h:outputText value="Titre de votre CV" class="design-output"/>
+                            <h:inputText value="#{creerCvControleur.cv.titreCv}" /> 
+
+                            <h:outputLabel  value="Secteur d'activité" class="design-output"/>
+                            <p:selectOneMenu  id="SecteurActiviteMenu" value="#{creerCvControleur.cv.secteurActivite}">
+                                <f:selectItems value="#{creerCvControleur.listeSecteursActivite}" var="secteurActivite" itemLabel="#{secteurActivite.nomSecteurActivite}"/>
+                            </p:selectOneMenu>  
+
+                            <h:outputLabel  value="Niveau du poste" class="design-output"/>
+                            <p:selectOneMenu  id="NiveauPosteMenu" value="#{creerCvControleur.cv.niveauPosteEnum}">
+                                <f:selectItems value="#{creerCvControleur.niveauPosteEnum}"/>
+                            </p:selectOneMenu>  
+
+                            <h:outputLabel  value="Années d'experience" class="design-output"/>
+                            <p:inputText  id="anneeExperience" value="#{creerCvControleur.cv.anneeExperience}" >
+                                <f:convertNumber integerOnly="true"/>    
+                            <f:ajax event="blur" render="growl" />
+                            </p:inputText>
+
+                            <h:outputLabel  value="Niveau d'étude" class="design-output"/>
+                            <p:selectOneMenu id="niveauEtudeMenu" value="#{creerCvControleur.cv.niveauEtudeEnum}" >
+                                <f:selectItems  value="#{creerCvControleur.niveauEtudeEnum}"/>
+                            </p:selectOneMenu>
+
+                        </h:panelGrid>    
+                    </p:outputPanel>   
+                    <p:commandButton value="Suivant"  oncomplete=" PF('cvDialog2').show(); PF('cvDialog').hide();"  />
+                </p:dialog>  
+
+                <p:dialog  widgetVar="cvDialog2" modal="true" width="900" height="600">
+                    <p:outputPanel id="cvCreationPanel" >
+                        <h:panelGrid columns="2">
+                            <p:outputPanel id="infosFormation" >
+                                <h:outputLabel value="Ajouter une formation" class="design-output"/>
+                                <p:panelGrid  columns="2"  style="height: 250px;">
+                                    <h:outputText value="titre de la formation" class="design-output"/>
+                                    <h:inputText value="#{creerCvControleur.selectedFormation.titreFormation}"/>
+
+                                    <p:outputLabel value="Date de début"  for="dateDebutFormation" class="design-output"/>
+                                    <p:calendar id="dateDebutFormation" navigator="true" yearRange="c-100:c+0" value="#{creerCvControleur.selectedFormation.dateDebut}">
+                                    </p:calendar>
+
+                                    <p:outputLabel value="Date de fin"  for="dateFinFormation" class="design-output"/>
+                                    <p:calendar id="dateFinFormation" navigator="true" yearRange="c-100:c+0" value="#{creerCvControleur.selectedFormation.dateFin}">
+                                    </p:calendar> 
+                                    <h:outputText value="niveau de la formation" class="design-output"/>        
+                                    <p:selectOneMenu id="niveauFormationMenu" value="#{creerCvControleur.selectedFormation.niveauEtude}" >
+                                        <f:selectItems  value="#{creerCvControleur.niveauEtudeEnum}"/>
+                                    </p:selectOneMenu>
+
+                                    <h:outputText value="nom de l'établissement" class="design-output"/>
+                                    <h:inputText value="#{creerCvControleur.selectedFormation.nomEtablissement}"/>
+
+                                    <h:outputText value="Description" class="design-output"/>
+                                    <h:inputText value="#{creerCvControleur.selectedFormation.description}"/>
+                                </p:panelGrid>
+
+                                <p:commandButton value="Ajouter la formation" update="infosFormation  formationsTable" actionListener="#{creerCvControleur.addFormation()}" />                            
+                            </p:outputPanel>
+
+                            <p:outputPanel id="infosExperience">
+                                <h:outputLabel value="Ajouter une experience" class="design-output"/>
+                                <p:panelGrid  columns="2" style="height: 250px;" >
+                                    <h:outputText value="titre du poste" class="design-output"/>
+                                    <h:inputText value="#{creerCvControleur.selectedExperience.titrePoste}"/>
+
+                                    <p:outputLabel value="Date de début"  for="dateDebutExperience" class="design-output"/>
+                                    <p:calendar id="dateDebutExperience" navigator="true" yearRange="c-100:c+0" value="#{creerCvControleur.selectedExperience.dateDebut}">
+                                    </p:calendar>
+
+                                    <p:outputLabel value="Date de fin"  for="dateFinExperience" class="design-output"/>
+                                    <p:calendar id="dateFinExperience" navigator="true" yearRange="c-100:c+0" value="#{creerCvControleur.selectedExperience.dateFin}">
+                                    </p:calendar> 
+                                    <h:outputText value="niveau de la formation" class="design-output"/>        
+                                    <p:selectOneMenu id="niveauPoseMenu" value="#{creerCvControleur.selectedExperience.niveauPosteEnum}" >
+                                        <f:selectItems  value="#{creerCvControleur.niveauPosteEnum}"/>
+                                    </p:selectOneMenu>
+
+                                    <h:outputText value="nom de l'entreprise" class="design-output"/>
+                                    <h:inputText value="#{creerCvControleur.selectedExperience.nomEntreprise}"/>
+
+                                    <h:outputText value="description" class="design-output"/>
+                                    <h:inputText value="#{creerCvControleur.selectedExperience.description}"/>
+                                </p:panelGrid>
+
+                                <p:commandButton value="Ajouter l'experience"  update="infosExperience  experiencesTable" actionListener="#{creerCvControleur.addExperience()}" />                            
+                            </p:outputPanel>
+                                
+                            <p:dataTable id="formationsTable" value="#{creerCvControleur.cv.listeFormations}" var="formation" style="margin-top: 5px">
+                            <p:column headerText="Diplomes et Formations">
+                                <h:outputText value="#{formation.titreFormation}" />
+                            </p:column>    
+                            <p:column headerText="Niveau d'étude">
+                                <p:outputLabel value="#{formation.niveauEtude}" />
+                            </p:column>  
+                        </p:dataTable>                    
+
+                        <p:dataTable id="experiencesTable" value="#{creerCvControleur.cv.listeExperiences}" var="experience" style="margin-top: 5px">
+                            <p:column headerText="Vos Experiences">
+                                <h:outputText value="#{experience.niveauPosteEnum}" />
+                            </p:column>    
+                            <p:column headerText="Nom de l'enreprise">
+                                <p:outputLabel value="#{experience.nomEntreprise}" />
+                            </p:column>  
+                        </p:dataTable>                             
+                            
+                        </h:panelGrid>    
+
+                     </p:outputPanel>    
+
+                    <p:outputPanel>
+
+                                                
+                        <h:panelGrid  columns="2"  style="margin-top: 30px;" width="100%">
+                            <h:panelGrid  columns="3"  >
+                                <h:outputLabel  value="Ajouter des langues" class="design-output"/>
+                                <p:selectOneMenu  id="langueMenu" value="#{creerCvControleur.selectedLangue}">
+                                    <f:selectItems value="#{creerCvControleur.langueEnum}"/>
+                                </p:selectOneMenu>                        
+                                <p:commandButton value="Add" update="languesTable  langueMenu" actionListener="#{creerCvControleur.addLangue()}" />
+                            </h:panelGrid>
+                            <h:panelGrid  columns="3"  >
+                                <h:outputLabel  value="Ajouter des compétences" class="design-output"/>
+                                <p:selectOneMenu id="competenceMenu" value="#{creerCvControleur.selectedCompetence}" >
+                                    <f:selectItems  value="#{creerCvControleur.listeCompetences}" var="competence" itemLabel="#{competence.nomCompetence}"/>
+                                </p:selectOneMenu>
+                                <p:commandButton value="Add" update="competencesTable competenceMenu" actionListener="#{creerCvControleur.addCompetence()}" />                        
+                            </h:panelGrid>
+                        </h:panelGrid>
+
+                        <p:dataTable id="languesTable" value="#{creerCvControleur.cv.listeLangues_cv}" var="langue" >
+                            <p:column headerText="Vos Langues">
+                                <h:outputText value="#{langue.langueEnum}" />
+                            </p:column>    
+                            <p:column headerText="niveau">
+                                <p:rating value="#{langue.niveauLangue}" />
+                            </p:column>  
+                        </p:dataTable>
+
+                        <p:dataTable id="competencesTable" value="#{creerCvControleur.cv.listeCompetences_cv}" var="competence" >
+                            <p:column headerText="Vos compétences">
+                                <h:outputText value="#{competence.competence.nomCompetence}"/>
+                            </p:column>    
+                            <p:column headerText="Niveau">
+                                <p:rating value="#{competence.niveauCompetence}" />
+                            </p:column>  
+                        </p:dataTable>                
+                    </p:outputPanel>
+
+                    <p:commandButton value="Retour"  oncomplete=" PF('cvDialog').show(); PF('cvDialog2').hide();"  />
+                    <p:commandButton value="Suivant"  oncomplete=" PF('cvDialog3').show(); PF('cvDialog2').hide();"  />
+                </p:dialog>                         
+
+                <p:dialog  widgetVar="cvDialog3" modal="true" responsive = "true" width="550">
+                    <p:outputPanel id="infosLien">
+                        <h:outputText value="Ajouter vos réseaux sociaux" class="design-output"/>
+                        <p:panelGrid columns="2">
+                            <h:outputText value="Url" class="design-output"/>
+                            <h:inputText value="#{creerCvControleur.selectedLien.url}"/>     
+                        </p:panelGrid>
+                        <p:commandButton value="Ajouter" update="liensTable infosLien" actionListener="#{creerCvControleur.addLien()}" />     
+                    </p:outputPanel>
+
+                    <p:outputPanel id="infosPublication" style="margin-top: 15px;">
+                        <h:outputText value="Ajoutez les liens de vos publications" class="design-output"/>
+                        <p:panelGrid columns="2">
+                            <h:outputText value="Titre de la publication" class="design-output"/>
+                            <h:inputText value="#{creerCvControleur.selectedPublication.titre}"/>     
+
+                            <h:outputText value="Lien de publication" class="design-output"/>
+                            <h:inputText value="#{creerCvControleur.selectedPublication.url}"/>  
+
+                        </p:panelGrid>
+                        <p:commandButton value="Ajouter" update="publicationsTable infosPublication" actionListener="#{creerCvControleur.addPublication()}" />     
+                    </p:outputPanel>
+
+                    <p:outputPanel>
+                        <p:dataTable id="liensTable" value="#{creerCvControleur.cv.listeLiens}" var="lien"  style="margin-top: 15px; ">
+                            <p:column headerText="Liens des reseaux sociaux">
+                                <h:outputText value="#{lien.url}" />
+                            </p:column>    
+                        </p:dataTable>   
+                        <p:dataTable id="publicationsTable" value="#{creerCvControleur.cv.listePublications}" var="publication" style="margin-top: 15px; ">
+                            <p:column headerText="Titres des publications">
+                                <h:outputText value="#{publication.titre}" />
+                            </p:column> 
+                            <p:column headerText="Lien des publications">
+                                <h:outputText value="#{publication.url}" />
+                            </p:column>    
+                        </p:dataTable>   
+                    </p:outputPanel>
+
+
+                    <p:outputPanel style="margin-top: 15px; margin-bottom: 15px;">
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Qualités humaines" class="design-output"/>
+                            <h:inputText value="#{listeCvsControleur.selectedCv.qualitesHumaines}"/> 
+
+                            <h:outputText value="Informations complémentaires" class="design-output"/>
+                            <h:inputText value="#{creerCvControleur.cv.informationsComplementaires}"/> 
+
+                            <h:outputLabel  value="Situation Actuelle" class="design-output"/>
+                            <p:selectOneMenu id="situationActuelleMenu" value="#{creerCvControleur.cv.situationActuelle}"  >
+                                <f:selectItems  value="#{creerCvControleur.situationActuelleEnum}" var="situationActuelle" itemLabel="#{situationActuelle.nomSituation}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </p:outputPanel>                    
+                    
+                    <p:commandButton value="Retour"  oncomplete=" PF('cvDialog2').show(); PF('cvDialog3').hide();"  />
+                    <p:commandButton value="Finir la création du CV" action="#{creerCvControleur.creerCv()}" update=" growl @form :listCvsForm :choixCvActifForm "/>
+
+
+                </p:dialog>  
+
+
+             </h:form>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

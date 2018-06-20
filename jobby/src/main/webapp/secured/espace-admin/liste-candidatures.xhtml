@@ -1,0 +1,72 @@
+<ui:composition template="/WEB-INF/template/admin-layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">Gestion des Offres</ui:define>
+
+    <ui:define name="admin-content">
+    <h:form> 
+        
+        
+    
+        
+        <p:dataTable id="candidaturesDataTable" widgetVar="candidaturesDataTable" sortBy="#{candidature.cv.id}"  value="#{listeCandidaturesControleur.listeCandidatures}" var="candidature" editable="true" >
+            
+            
+            <f:facet name="header" class="column-header">
+               Toutes les candidatures
+            </f:facet>
+            <f:facet name="header">
+                <p:outputPanel>
+                    <h:outputText value="Search all fields:" />
+                    <p:inputText id="globalFilter" onkeyup="PF('candidaturesDataTable').filter()"  style="width:150px" placeholder="Entrer un mot clé"/>
+                </p:outputPanel>
+            </f:facet>    
+
+            <p:ajax event="rowEdit" listener="#{listeCandidaturesControleur.onRowEdit}" update="growl"/>
+            <p:ajax event="rowEditCancel" listener="#{listeCandidaturesControleur.onRowCancel}" update="growl" />
+            
+            <p:column headerText="id du cv" filterBy="#{candidature.cv.id}" filterMatchMode="contains" sortBy="#{candidature.cv.id}">
+                <h:outputText value="#{candidature.cv.id}" />         
+            </p:column>
+            
+            <p:column headerText="id de l'offre" filterBy="#{candidature.offre.id}" filterMatchMode="contains" sortBy="#{candidature.offre.id}">
+                <h:outputText value="#{candidature.offre.id}" />         
+            </p:column>
+
+            <p:column headerText="Date de candidature" filterBy="#{candidature.dateCandidature}" filterMatchMode="contains" sortBy="#{candidature.dateCandidature}"> 
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{candidature.dateCandidature}" /></f:facet>
+                    <f:facet name="input"><p:calendar value="#{candidature.dateCandidature}" navigator="true" yearRange="c-100:c+0" style="width:100%" /></f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column headerText="Réponse du recruteur" filterBy="#{candidature.typeReponse.nomTypeReponse}" filterMatchMode="contains" sortBy="#{candidature.typeReponse.nomTypeReponse}"> 
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{candidature.typeReponse.nomTypeReponse}" /></f:facet>
+                    <f:facet name="input">
+                        <h:selectOneMenu value="#{candidature.typeReponse}" style="width:100%">
+                            <f:selectItems value="#{listeCandidaturesControleur.listeTypesReponses}" var="typeReponse" itemLabel="#{typeReponse.nomTypeReponse}" itemValue="#{typeReponse}" />
+                        </h:selectOneMenu>
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+            
+            
+            <p:column  headerText="Modif">
+                <p:rowEditor />
+            </p:column>
+            
+
+          
+        </p:dataTable>
+
+    
+    </h:form>
+        
+
+    </ui:define>
+</ui:composition>
+

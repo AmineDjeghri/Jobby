@@ -1,0 +1,289 @@
+<ui:composition template="/WEB-INF/template/layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">Mes Cvs</ui:define>
+
+    <ui:define name="content"> 
+        <div class="candidature-offre">
+            <div class="filter-trier-div">
+                
+                <h:form class="trier-form">
+                    <p:panel class="trier-panel" header="Poids">
+                        <h:panelGrid columns="2" cellpadding="8">
+                            
+                            <h:outputLabel  value="Experience" />
+                            <p:outputPanel>
+                                <p:inputText id="poidsExperience" value="#{listeCandidatures_OffreControleur.w1}" />
+                                <p:slider class="slider" style="width: 200px;" for="poidsExperience" minValue="0" maxValue="10" step="1" />
+                            </p:outputPanel>
+                            
+                            <h:outputLabel  value="Niveau Etude" />
+                            <p:outputPanel>
+                                <p:inputText id="poidsNiveauEtude" value="#{listeCandidatures_OffreControleur.w4}"/>
+                                <p:slider class="slider" style="width: 200px;"  for="poidsNiveauEtude" minValue="0" maxValue="10" step="1" />
+                            </p:outputPanel>
+                            
+                            <h:outputLabel  value="Competence" />
+                            <p:outputPanel>
+                                <p:inputText id="poidsCompetence"  value="#{listeCandidatures_OffreControleur.w2}"/>
+                                <p:slider class="slider" style="width: 200px;" for="poidsCompetence" minValue="0" maxValue="10" step="1" />
+                            </p:outputPanel>                            
+
+                            <h:outputLabel  value="Langue" />
+                            <p:outputPanel>
+                                <p:inputText id="PoidsLangue" value="#{listeCandidatures_OffreControleur.w3}"/>
+                                <p:slider class="slider" style="width: 200px;" for="PoidsLangue" minValue="0" maxValue="10" step="1" />
+                            </p:outputPanel>
+                             
+                        </h:panelGrid>
+                        <div class="div-submit">
+                            <p:commandButton action="#{listeCandidatures_OffreControleur.trier()}" value="trier les candidatures"  ajax="false" />                           
+                        </div>
+                    </p:panel>
+                </h:form>
+                
+                <h:form class="filter-form">
+                      <!--filter panel-->    
+                    <p:panel class="filter-panel">
+                        <h:panelGrid  columns="2"  cellpadding="8" >   
+
+                            <h:outputText value="Secteur d'activité" />
+                            <h:selectOneMenu  id="secteurActiviteMenu" value="#{listeCandidatures_OffreControleur.filteredSecteurActivite}">
+                                <f:selectItem itemLabel="Selectionner un Secteur"/>
+                                <f:selectItems  var="secteurActivite" value="#{listeCandidatures_OffreControleur.listeSecteursActivite}" itemValue="#{secteurActivite}" itemLabel="#{secteurActivite.nomSecteurActivite}"/>
+                            </h:selectOneMenu>                                                                      
+
+                            <h:outputLabel  value="Situation Familiale" />
+                            <h:selectOneMenu  id="situationFamilialeMenu" value="#{listeCandidatures_OffreControleur.filterSituationFamiliale}">
+                                <f:selectItem itemLabel="Selectionner une situation"/>
+                                <f:selectItems  var="situationFamiliale" value="#{listeCandidatures_OffreControleur.situationFamilialeEnums}" itemValue="#{situationFamiliale}" itemLabel="#{situationFamiliale}"/>
+                            </h:selectOneMenu>   
+
+                            <h:outputText value="Année d'experience " />
+                             <p:outputPanel>
+                                 <p:inputNumber placeholder="Année exp min" value="#{listeCandidatures_OffreControleur.filterAnneeExpMin}"/>
+                                 <p:inputNumber placeholder="Année exp max" value="#{listeCandidatures_OffreControleur.filterAnneeExpMax}"/>
+                            </p:outputPanel>
+
+                            <h:outputText value="Niveau d'étude" />
+                            <h:selectOneMenu  id="niveauEtudeMenu" value="#{listeCandidatures_OffreControleur.filtredNiveauEtude}">
+                                <f:selectItem itemLabel="Selectionner un nivreau"/>
+                                <f:selectItems  var="niveauEtude" value="#{listeCandidatures_OffreControleur.niveauEtudeEnums}" itemValue="#{niveauEtude}" itemLabel="#{niveauEtude.nomNiveauEtude}"/>
+                            </h:selectOneMenu>   
+
+                            <h:outputText value="Service Militaire" />
+                            <p:selectOneButton value="#{listeCandidatures_OffreControleur.filterServiceMilitaire}" class="selected-service-militaire">
+                                <f:converter converterId="javax.faces.Boolean" />
+                                <div tabindex="1">
+
+                                    <f:selectItem itemLabel="Non précisé" itemValue="" class="selected-service-militaire" />
+                                
+                                </div>
+                                <f:selectItem itemLabel="oui" itemValue="true" />
+                                <f:selectItem itemLabel="non" itemValue="false" />
+                            </p:selectOneButton>
+
+                            <f:facet name = "footer">
+                                <div class="div-submit">
+                                    <p:commandButton id="submit" value = "Filtrer" action=" " actionListener="#{listeCandidatures_OffreControleur.filter()}" update=":candidaturesForm:candidaturesDataList"/> 
+                                </div> 
+                            </f:facet>
+
+                        </h:panelGrid>
+                    </p:panel> 
+                </h:form>
+            </div>
+            
+            
+            <!--Forme liste des candidatures d'une offre -->
+            <h:form class="candidatures-form" id="candidaturesForm">                 
+                <p:dataList id="candidaturesDataList"  itemType="none" value="#{listeCandidatures_OffreControleur.listeCandidatures}" var="candidature" >
+                    <div class="candidature">
+                        <div class="general-infos">
+                            <h:outputLabel class="output" value="Nom: #{candidature.cv.candidat.nom} "/>
+                            <h:outputLabel class="output" value="Prénom: #{candidature.cv.candidat.prenom} "/>
+                            <h:outputLabel class="output" value="Niveau étude: #{candidature.cv.niveauEtudeEnum} "/>
+                            <h:outputLabel class="output" value="Experience: #{candidature.cv.anneeExperience} ans"/>
+                        </div>
+                        <div>
+                            <div style="color: white; text-align: center;  width: 125px; height:86px; background: grey;">
+                                <img id="imgLogo" src="#{resource['/img/a.png']}" alt="Logo" style="width: 60px;"/>
+                            </div>
+                            <p:commandLink  value="Afficher détails" oncomplete="PF('candidatureDialog').show()" update="@form:candidatureDialog">
+                                <f:setPropertyActionListener value="#{candidature}" target="#{listeCandidatures_OffreControleur.selectedCandidature}"/> 
+                            </p:commandLink> 
+                            
+                        </div>  
+                    </div>    
+                </p:dataList>
+
+                <p:dialog header="Informations du candidat" id="candidatureDialog" width="800"  class="candidature-dialog" widgetVar="candidatureDialog"  modal="true" responsive = "true" >
+                    
+                    <p:fieldset  legend="A propos du candidat" >
+                        <div style="float: right; color: white; text-align: center;  width: 125px; height:86px; background: grey;">
+                            Photo
+                        </div>
+                        <h:panelGrid columns="2" >
+                            <h:outputLabel value="Date de candidature"/>
+                            <h:outputLabel value="#{listeCandidatures_OffreControleur.selectedCandidature.dateCandidature}">
+                                <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+                            </h:outputLabel>
+
+                            <h:outputLabel styleClass="fa fa-user" value=" Nom et prénom"/>
+                            <h:outputLabel value="#{listeCandidatures_OffreControleur.selectedCandidature.cv.candidat.nom} #{listeCandidatures_OffreControleur.selectedCandidature.cv.candidat.prenom}"/>
+
+                            <h:outputLabel styleClass="fa fa-calendar" value=" Date de naissance "/>
+                            <h:outputLabel value="#{listeCandidatures_OffreControleur.selectedCandidature.cv.candidat.dateNaissance}">
+                            <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+                            </h:outputLabel>
+
+                            <h:outputLabel styleClass="fa fa-phone" value=" Téléphone"/>
+                            <h:outputLabel value="#{listeCandidatures_OffreControleur.selectedCandidature.cv.candidat.telCondidat}"/>
+
+                            <h:outputLabel styleClass="fa fa-home" value="Adresse"/>
+                            <h:outputLabel value="#{listeCandidatures_OffreControleur.selectedCandidature.cv.candidat.adresseCandidat}"/>                           
+
+                        </h:panelGrid>                    
+                    </p:fieldset>
+                    <p:fieldset legend="Profil recrutement">
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Secteur d'activité souhaité"/>
+                            <h:outputLabel value="#{listeCandidatures_OffreControleur.selectedCandidature.cv.secteurActivite.nomSecteurActivite}"/>
+
+                            <h:outputLabel value="Poste souhaité"/>
+                            <h:outputLabel value="#{listeCandidatures_OffreControleur.selectedCandidature.cv.niveauPosteEnum.nomNiveauPoste}"/>
+                            
+                            <h:outputLabel value="Années d'experience"/>
+                            <h:outputLabel value="#{listeCandidatures_OffreControleur.selectedCandidature.cv.anneeExperience}"/>
+                            
+                            <h:outputLabel value="Niveau d'étude"/>
+                            <h:outputLabel value="#{listeCandidatures_OffreControleur.selectedCandidature.cv.niveauEtudeEnum.nomNiveauEtude}"/>
+
+                            <h:outputLabel value="Situation Actuelle"/>
+                            <h:outputLabel value="#{listeCandidatures_OffreControleur.selectedCandidature.cv.situationActuelle.nomSituation}"/>
+
+                            <h:outputLabel value="Qualités humaines"/>
+                            <h:outputLabel value="#{listeCandidatures_OffreControleur.selectedCandidature.cv.qualitesHumaines}"/>
+                            
+                            <h:outputLabel value="Service Militaire"/>
+                            <h:selectBooleanCheckbox disabled="true" value="#{listeCandidatures_OffreControleur.selectedCandidature.cv.candidat.serviceMilitaire}"/>
+                            
+                            <h:outputLabel styleClass="fa fa-home" value="Situation familiale"/>
+                            <h:outputLabel value="#{listeCandidatures_OffreControleur.selectedCandidature.cv.candidat.situationFamilialeEnum}"/>
+                        </h:panelGrid>    
+                    </p:fieldset>
+                    
+                    <h:panelGrid columns="2">
+                        <p:dataTable id="languesTable" class="dataTable" value="#{listeCandidatures_OffreControleur.selectedCandidature.cv.listeLangues_cv}" var="langue" >                    
+                           <p:column headerText="langue">
+                               <h:outputText value="#{langue.langueEnum}" />
+                           </p:column>    
+                            <p:column headerText="niveau">
+                                <p:rating value="#{langue.niveauLangue}" />
+                            </p:column>  
+                        </p:dataTable>
+
+                        <p:dataTable id="competencesTable" class="dataTable"  value="#{listeCandidatures_OffreControleur.selectedCandidature.cv.listeCompetences_cv}" var="competence" >                    
+                            <p:column headerText="competence">
+                                <h:outputText value="#{competence.competence.nomCompetence}" />
+                            </p:column> 
+
+                            <p:column headerText="niveau">
+                                <p:rating value="#{competence.niveauCompetence}" />
+                            </p:column>                              
+                        </p:dataTable>  
+                    </h:panelGrid>  
+                    <h:panelGrid columns="1">
+                        <p:dataTable var="formation" value="#{listeCandidatures_OffreControleur.selectedCandidature.cv.listeFormations}">
+                           <f:facet name="header">
+                                Formations
+                            </f:facet>      
+                            <p:column headerText="titre">
+                                <h:outputText value="#{formation.titreFormation}"/>
+                            </p:column>  
+                            <p:column headerText="Date Debut">
+                                <h:outputText value="#{formation.dateDebut}">
+                                    <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+                                </h:outputText>
+                            </p:column>  
+                            <p:column headerText="Date Fin">
+                                <h:outputText value="#{formation.dateFin}">
+                                    <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+                                </h:outputText>
+                            </p:column>                          
+                            <p:column headerText="niveau d'étude">
+                                <h:outputText value="#{formation.niveauEtude.nomNiveauEtude}"/>
+                            </p:column> 
+                            <p:column headerText="Etablissement">
+                                <h:outputText value="#{formation.nomEtablissement}"/>
+                            </p:column>                          
+                            <p:column headerText="Description">
+                                <h:outputText value="#{formation.description}"/>
+                            </p:column>  
+
+                        </p:dataTable>
+                        <p:dataTable var="experience" value="#{listeCandidatures_OffreControleur.selectedCandidature.cv.listeExperiences}">
+                            <f:facet name="header">
+                                Experiences
+                            </f:facet>                            
+                            <p:column headerText="titre du poste">
+                                <h:outputText value="#{experience.titrePoste}"/>
+                            </p:column>  
+                            <p:column headerText="Date Debut">
+                                <h:outputText value="#{experience.dateDebut}">
+                                    <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+                                </h:outputText>
+                            </p:column>  
+                            <p:column headerText="Date Fin">
+                                <h:outputText value="#{experience.dateFin}">
+                                    <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+                                </h:outputText>
+                            </p:column>                          
+                            <p:column headerText="niveau du poste">
+                                <h:outputText value="#{experience.niveauPosteEnum.nomNiveauPoste}"/>
+                            </p:column> 
+                            <p:column headerText="Entreprise">
+                                <h:outputText value="#{experience.nomEntreprise}"/>
+                            </p:column>                          
+                            <p:column headerText="Description">
+                                <h:outputText value="#{experience.description}"/>
+                            </p:column>                        
+                        </p:dataTable>
+
+                        <p:dataTable  var="publication" value="#{listeCandidatures_OffreControleur.selectedCandidature.cv.listePublications}">
+                                <f:facet name="header">
+                                   Publications
+                                </f:facet>
+                            <p:column headerText="Titre de la publication">
+                                <h:outputText value="#{publication.titre}"/>
+                            </p:column>                      
+                            <p:column headerText="lien de la publication">
+                                <h:link value="#{publication.url}" target="_blank"/>
+                            </p:column>                      
+                        </p:dataTable>
+
+                        <p:dataTable var="lien" value="#{listeCandidatures_OffreControleur.selectedCandidature.cv.listeLiens}">
+                            <p:column headerText="Liens">
+                                <h:link value="#{lien.url}" target="_blank"/>
+                            </p:column>                                         
+                        </p:dataTable>
+                    </h:panelGrid>
+                    
+                    
+
+                    <p:commandButton update="@form:candidatureDialog"  value="Embaucher" class="#{listeCandidatures_OffreControleur.checkAccepted() ? 'submitActive' :''}" actionListener="#{listeCandidatures_OffreControleur.accepter()}"/>
+                    <p:commandButton update="@form:candidatureDialog"  value="Ne pas embaucher" class="#{listeCandidatures_OffreControleur.checkRefused() ? 'submitActive' :''}" actionListener="#{listeCandidatures_OffreControleur.refuser()}"  />
+                    <p:commandButton update="@form:candidatureDialog"  value="Mettre en attente" class="#{listeCandidatures_OffreControleur.checkWaiting() ? 'submitActive' :''}" actionListener="#{listeCandidatures_OffreControleur.mettreEntAttente}" />
+
+                </p:dialog>
+
+
+
+            </h:form>      
+        </div>
+    </ui:define>
+</ui:composition>
