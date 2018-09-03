@@ -6,7 +6,7 @@ This web application uses and is made with:
 Java EE (JSF Framework), Postgresql, Glassfish, Google Maps API , Ajax, Primefaces, Maven, Netbeans,javascript
 
 ## Main features: 
-- rank resumes in relation to a job offer using 4 criterias: Years of experience, degree of study, skills and languages.
+- Rank resumes in relation to a job offer using 4 criterias: Years of experience, degree of study, skills and languages.
 - Localize the offers in tha map (using google maps) 
 - A Dashbord with a lot of indicators 
 - Possibility for the candidate to apply for an offer.
